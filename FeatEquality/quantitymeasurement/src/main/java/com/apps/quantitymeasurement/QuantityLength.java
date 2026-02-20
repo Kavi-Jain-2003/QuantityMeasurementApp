@@ -6,6 +6,7 @@ public class QuantityLength {
 
     private final double value;
     private final LengthUnit unit;
+    private static final double EPSILON = 0.0001;
 
     public QuantityLength(double value, LengthUnit unit) {
 
@@ -37,7 +38,7 @@ public class QuantityLength {
 
         QuantityLength other = (QuantityLength) obj;
 
-        return Double.compare(this.toFeet(), other.toFeet()) == 0;
+        return Math.abs(this.toFeet() - other.toFeet()) < EPSILON;
     }
 
     @Override

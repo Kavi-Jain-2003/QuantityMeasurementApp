@@ -7,13 +7,16 @@ public enum LengthUnit {
     YARD(3.0),                         // 1 yard = 3 feet
     CENTIMETER(0.0328084167);          // 1 cm = 0.0328084167 feet
 
-    private final double conversionFactorToFeet;
+    private final double factorToFeet;
 
-    LengthUnit(double conversionFactorToFeet) {
-        this.conversionFactorToFeet = conversionFactorToFeet;
+    LengthUnit(double factorToFeet) {
+        this.factorToFeet = factorToFeet;
     }
 
     public double toFeet(double value) {
-        return value * conversionFactorToFeet;
+        return value * factorToFeet;
+    }
+    public double fromFeet(double feetValue) {
+        return feetValue / factorToFeet;
     }
 }

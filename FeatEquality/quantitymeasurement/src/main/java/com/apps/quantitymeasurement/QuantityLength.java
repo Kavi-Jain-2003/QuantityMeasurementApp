@@ -45,4 +45,21 @@ public class QuantityLength {
     public int hashCode() {
         return Objects.hash(toFeet());
     }
+    public static double convert(double value,
+            LengthUnit source,
+            LengthUnit target) {
+
+if (!Double.isFinite(value))
+throw new IllegalArgumentException("Invalid numeric value");
+
+if (source == null || target == null)
+throw new IllegalArgumentException("Unit cannot be null");
+
+// Step 1: convert to base unit (feet)
+double valueInFeet = source.toFeet(value);
+
+// Step 2: convert from feet to target
+return target.fromFeet(valueInFeet);
+}
+
 }

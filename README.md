@@ -1,12 +1,7 @@
 # QuantityMeasurementApp 
 
-19-Feb-2026 (Thursday):
-Studied and completed UC1 and UC2
-
-
-20-Feb-2026 (Friday):
-Studied and completed UC3 and UC4
-
-
-24-Feb-2026 (Tuesday):
-Studied and completed UC5
+<h1>UC1 Feet Measurement Quality </h1>
+<h1>UC2 Feet and Inches measurement equality</h1>
+<h1>UC3 Generic Quantity Class</h1>
+<h1>UC4 Extended Unit Support</h1>
+<h1>UC5 Unit-to-Unit Conversion</h1>

@@ -19,5 +19,12 @@ public class QuantityMeasurementApp {
 
         double result3 = QuantityLength.convert(2.54, LengthUnit.CENTIMETER, LengthUnit.INCH);
         System.out.println("2.54 cm in Inches: " + result3);
+        
+        QuantityLength a = new QuantityLength(1.0, LengthUnit.FEET);
+        QuantityLength b = new QuantityLength(12.0, LengthUnit.INCH);
+
+        QuantityLength result = a.add(b);
+
+        System.out.println(result);
     }
 }

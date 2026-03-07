@@ -188,6 +188,17 @@ public class QuantityLengthTest {
      assertThrows(IllegalArgumentException.class,
              () -> QuantityLength.convert(1.0, null, LengthUnit.FEET));
  }
+//uc6
+ @Test
+ void testAddition_SameUnit_FeetPlusFeet() {
+
+     QuantityLength a = new QuantityLength(1.0, LengthUnit.FEET);
+     QuantityLength b = new QuantityLength(2.0, LengthUnit.FEET);
+
+     QuantityLength result = a.add(b);
+
+     assertEquals(3.0, result.getValue(), 0.001);
+ }
 
 
 

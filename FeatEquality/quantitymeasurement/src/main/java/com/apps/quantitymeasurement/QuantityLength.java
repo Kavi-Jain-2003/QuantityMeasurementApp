@@ -79,18 +79,46 @@ public class QuantityLength {
 	    if (other == null)
 	        throw new IllegalArgumentException("Second operand cannot be null");
 
-	    // convert both to feet
+//	    // convert both to feet
+//	    double thisFeet = this.unit.toFeet(this.value);
+//	    double otherFeet = other.unit.toFeet(other.value);
+//
+//	    // add values
+//	    double sumFeet = thisFeet + otherFeet;
+
+	    // convert back to first operand unit
+//	    double result = this.unit.fromFeet(sumFeet);
+
+//	    return new QuantityLength(result, this.unit);
+	    return addInternal(other, this.unit);
+	}
+	private QuantityLength addInternal(QuantityLength other, LengthUnit targetUnit) {
+
+	    // convert both to base unit (FEET)
 	    double thisFeet = this.unit.toFeet(this.value);
 	    double otherFeet = other.unit.toFeet(other.value);
 
-	    // add values
+	    // add
 	    double sumFeet = thisFeet + otherFeet;
 
-	    // convert back to first operand unit
-	    double result = this.unit.fromFeet(sumFeet);
+	    // convert to target unit
+	    double result = targetUnit.fromFeet(sumFeet);
 
-	    return new QuantityLength(result, this.unit);
+	    return new QuantityLength(result, targetUnit);
 	}
+
+	// UC7 METHOD (Overloaded add with target unit)
+	public QuantityLength add(QuantityLength other, LengthUnit targetUnit) {
+
+	    if (other == null)
+	        throw new IllegalArgumentException("Second operand cannot be null");
+
+	    if (targetUnit == null)
+	        throw new IllegalArgumentException("Target unit cannot be null");
+
+	    return addInternal(other, targetUnit);
+	}
+
 
 
 }

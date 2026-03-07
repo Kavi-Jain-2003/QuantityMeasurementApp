@@ -199,6 +199,17 @@ public class QuantityLengthTest {
 
      assertEquals(3.0, result.getValue(), 0.001);
  }
+ @Test
+ void testAddition_ExplicitTargetUnit_Feet() {
+
+     QuantityLength a = new QuantityLength(1.0, LengthUnit.FEET);
+     QuantityLength b = new QuantityLength(12.0, LengthUnit.INCHES);
+
+     QuantityLength result = a.add(b, LengthUnit.FEET);
+
+     assertEquals(2.0, result.getValue(), 0.001);
+ }
+
 
 
 

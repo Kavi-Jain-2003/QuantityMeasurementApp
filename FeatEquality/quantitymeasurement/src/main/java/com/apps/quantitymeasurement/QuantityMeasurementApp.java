@@ -24,7 +24,19 @@ public class QuantityMeasurementApp {
         QuantityLength b = new QuantityLength(12.0, LengthUnit.INCH);
 
         QuantityLength result = a.add(b);
-
         System.out.println(result);
+        
+        QuantityLength a2 = new QuantityLength(1.0, LengthUnit.FEET);
+        QuantityLength b2 = new QuantityLength(12.0, LengthUnit.INCH);
+
+        QuantityLength result4 = a2.add(b2, LengthUnit.FEET);
+        QuantityLength result5 = a2.add(b2, LengthUnit.INCH);
+        QuantityLength result6 = a2.add(b2, LengthUnit.YARD);
+
+        System.out.println(result4);
+        System.out.println(result5);
+        System.out.println(result6);
+
+        
     }
 }

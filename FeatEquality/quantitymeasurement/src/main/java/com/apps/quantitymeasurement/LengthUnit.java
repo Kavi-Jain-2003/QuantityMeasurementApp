@@ -1,11 +1,10 @@
 package com.apps.quantitymeasurement;
 
-public enum LengthUnit {
-
-    FEET(1.0),           // Base unit
-    INCH(1.0 / 12.0),  // 1 inch = 1/12 feet
-    YARD(3.0),                         // 1 yard = 3 feet
-    CENTIMETER(0.0328084167);          // 1 cm = 0.0328084167 feet
+public enum LengthUnit implements IMeasurable {
+    FEET(1.0),
+    INCH(1.0 / 12.0),
+    YARD(3.0),
+    CENTIMETER(0.0328084167);
 
     private final double factorToFeet;
 
@@ -13,10 +12,23 @@ public enum LengthUnit {
         this.factorToFeet = factorToFeet;
     }
 
-    public double toFeet(double value) {
+    @Override
+    public double getConversionFactor() {
+        return factorToFeet;
+    }
+
+    @Override
+    public double convertToBaseUnit(double value) {
         return value * factorToFeet;
     }
-    public double fromFeet(double feetValue) {
-        return feetValue / factorToFeet;
+
+    @Override
+    public double convertFromBaseUnit(double baseValue) {
+        return baseValue / factorToFeet;
+    }
+
+    @Override
+    public String getUnitName() {
+        return name();
     }
 }

@@ -365,6 +365,212 @@ class QuantityTest {
             length.divide((Quantity) weight);
         });
     }
-    
+    // ---------- ADDITION TESTS ----------
+
+    @Test
+    void givenSameLengthUnits_whenAdded_shouldReturnCorrectResult() {
+
+        Quantity<LengthUnit> a = new Quantity<>(5, LengthUnit.FEET);
+        Quantity<LengthUnit> b = new Quantity<>(5, LengthUnit.FEET);
+
+        Quantity<LengthUnit> result = a.add(b);
+
+        assertEquals(10, result.getValue());
+        assertEquals(LengthUnit.FEET, result.getUnit());
+    }
+
+    @Test
+    void givenDifferentLengthUnits_whenAdded_shouldReturnCorrectResult() {
+
+        Quantity<LengthUnit> feet = new Quantity<>(1, LengthUnit.FEET);
+        Quantity<LengthUnit> inch = new Quantity<>(12, LengthUnit.INCH);
+
+        Quantity<LengthUnit> result = feet.add(inch);
+
+        assertEquals(2, result.getValue());
+    }
+
+    @Test
+    void givenVolumeUnits_whenAddedWithTargetUnit_shouldReturnCorrectResult() {
+
+        Quantity<VolumeUnit> litre = new Quantity<>(1, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> ml = new Quantity<>(500, VolumeUnit.MILLILITRE);
+
+        Quantity<VolumeUnit> result = litre.add(ml, VolumeUnit.MILLILITRE);
+
+        assertEquals(1500, result.getValue());
+        assertEquals(VolumeUnit.MILLILITRE, result.getUnit());
+    }
+
+    // ---------- SUBTRACTION TESTS ----------
+
+    @Test
+    void givenSameUnits_whenSubtracted_shouldReturnCorrectResult() {
+
+        Quantity<WeightUnit> a = new Quantity<>(10, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> b = new Quantity<>(5, WeightUnit.KILOGRAM);
+
+        Quantity<WeightUnit> result = a.subtract(b);
+
+        assertEquals(5, result.getValue());
+    }
+
+    @Test
+    void givenDifferentUnits_whenSubtracted_shouldReturnCorrectResult() {
+
+        Quantity<LengthUnit> feet = new Quantity<>(10, LengthUnit.FEET);
+        Quantity<LengthUnit> inch = new Quantity<>(6, LengthUnit.INCH);
+
+        Quantity<LengthUnit> result = feet.subtract(inch);
+
+        assertEquals(9.5, result.getValue());
+    }
+
+    @Test
+    void givenUnits_whenSubtractedWithTargetUnit_shouldReturnCorrectResult() {
+
+        Quantity<VolumeUnit> litre = new Quantity<>(2, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> ml = new Quantity<>(500, VolumeUnit.MILLILITRE);
+
+        Quantity<VolumeUnit> result = litre.subtract(ml, VolumeUnit.MILLILITRE);
+
+        assertEquals(1500, result.getValue());
+    }
+
+    @Test
+    void givenSmallerValueMinusLarger_whenSubtracted_shouldReturnNegative() {
+
+        Quantity<WeightUnit> a = new Quantity<>(2, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> b = new Quantity<>(5, WeightUnit.KILOGRAM);
+
+        Quantity<WeightUnit> result = a.subtract(b);
+
+        assertEquals(-3, result.getValue());
+    }
+
+    @Test
+    void givenEqualQuantities_whenSubtracted_shouldReturnZero() {
+
+        Quantity<VolumeUnit> a = new Quantity<>(1, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> b = new Quantity<>(1000, VolumeUnit.MILLILITRE);
+
+        Quantity<VolumeUnit> result = a.subtract(b);
+
+        assertEquals(0, result.getValue());
+    }
+
+    // ---------- DIVISION TESTS ----------
+
+    @Test
+    void givenSameUnits_whenDivided_shouldReturnCorrectRatio() {
+
+        Quantity<WeightUnit> a = new Quantity<>(10, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> b = new Quantity<>(5, WeightUnit.KILOGRAM);
+
+        double result = a.divide(b);
+
+        assertEquals(2.0, result);
+    }
+
+    @Test
+    void givenDifferentUnits_whenDivided_shouldReturnCorrectRatio() {
+
+        Quantity<VolumeUnit> litre = new Quantity<>(1, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> ml = new Quantity<>(500, VolumeUnit.MILLILITRE);
+
+        double result = litre.divide(ml);
+
+        assertEquals(2.0, result);
+    }
+
+    @Test
+    void givenSmallerDividedByLarger_shouldReturnLessThanOne() {
+
+        Quantity<WeightUnit> a = new Quantity<>(5, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> b = new Quantity<>(10, WeightUnit.KILOGRAM);
+
+        double result = a.divide(b);
+
+        assertEquals(0.5, result);
+    }
+
+    @Test
+    void givenEqualQuantities_whenDivided_shouldReturnOne() {
+
+        Quantity<LengthUnit> a = new Quantity<>(12, LengthUnit.INCH);
+        Quantity<LengthUnit> b = new Quantity<>(1, LengthUnit.FEET);
+
+        double result = a.divide(b);
+
+        assertEquals(1.0, result);
+    }
+
+    @Test
+    void givenZeroDivisor_whenDivided_shouldThrowException() {
+
+        Quantity<LengthUnit> a = new Quantity<>(10, LengthUnit.FEET);
+        Quantity<LengthUnit> b = new Quantity<>(0, LengthUnit.FEET);
+
+        assertThrows(ArithmeticException.class, () -> a.divide(b));
+    }
+
+    // ---------- VALIDATION TESTS ----------
+
+    @Test
+    void givenNullOperand_whenAdd_shouldThrowException() {
+
+        Quantity<LengthUnit> a = new Quantity<>(10, LengthUnit.FEET);
+
+        assertThrows(IllegalArgumentException.class, () -> a.add(null));
+    }
+
+    @Test
+    void givenNullOperand_whenSubtract_shouldThrowException() {
+
+        Quantity<LengthUnit> a = new Quantity<>(10, LengthUnit.FEET);
+
+        assertThrows(IllegalArgumentException.class, () -> a.subtract(null));
+    }
+
+    @Test
+    void givenNullOperand_whenDivide_shouldThrowException() {
+
+        Quantity<LengthUnit> a = new Quantity<>(10, LengthUnit.FEET);
+
+        assertThrows(IllegalArgumentException.class, () -> a.divide(null));
+    }
+
+    @Test
+    void givenDifferentMeasurementCategories_whenAdded_shouldThrowException() {
+
+        Quantity<LengthUnit> length = new Quantity<>(10, LengthUnit.FEET);
+        Quantity<WeightUnit> weight = new Quantity<>(5, WeightUnit.KILOGRAM);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            length.add((Quantity) weight);
+        });
+    }
+
+    @Test
+    void givenDifferentMeasurementCategories_whenSubtracted_shouldThrowException() {
+
+        Quantity<LengthUnit> length = new Quantity<>(10, LengthUnit.FEET);
+        Quantity<WeightUnit> weight = new Quantity<>(5, WeightUnit.KILOGRAM);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            length.subtract((Quantity) weight);
+        });
+    }
+
+    @Test
+    void givenDifferentMeasurementCategories_whenDivided_shouldThrowException() {
+
+        Quantity<LengthUnit> length = new Quantity<>(10, LengthUnit.FEET);
+        Quantity<WeightUnit> weight = new Quantity<>(5, WeightUnit.KILOGRAM);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            length.divide((Quantity) weight);
+        });
+    }
 
 }

@@ -60,24 +60,43 @@ public class QuantityMeasurementApp {
 //
 //        Quantity<VolumeUnit> volume = new Quantity<>(1, VolumeUnit.LITRE);
 //        System.out.println("Convert to ml: " + volume.convertTo(VolumeUnit.MILLILITRE));
-    	 Quantity<LengthUnit> length1 = new Quantity<>(10, LengthUnit.FEET);
-         Quantity<LengthUnit> length2 = new Quantity<>(6, LengthUnit.INCH);
+//    	 Quantity<LengthUnit> length1 = new Quantity<>(10, LengthUnit.FEET);
+//         Quantity<LengthUnit> length2 = new Quantity<>(6, LengthUnit.INCH);
+//
+//         Quantity<LengthUnit> result1 = length1.add(length2);
+//         System.out.println("Addition: " + result1);
+//
+//         Quantity<LengthUnit> result2 = length1.subtract(length2);
+//         System.out.println("Subtraction: " + result2);
+//
+//         double ratio = length1.divide(length2);
+//         System.out.println("Division Ratio: " + ratio);
+//
+//         Quantity<WeightUnit> weight1 = new Quantity<>(1, WeightUnit.KILOGRAM);
+//         Quantity<WeightUnit> weight2 = new Quantity<>(1000, WeightUnit.GRAM);
+//
+//         System.out.println("Weight Equal: " + weight1.equals(weight2));
+//
+//         Quantity<VolumeUnit> volume = new Quantity<>(1, VolumeUnit.LITRE);
+//         System.out.println("Convert to ml: " + volume.convertTo(VolumeUnit.MILLILITRE));
+         Quantity<TemperatureUnit> c =
+                 new Quantity<>(0, TemperatureUnit.CELSIUS);
 
-         Quantity<LengthUnit> result1 = length1.add(length2);
-         System.out.println("Addition: " + result1);
+         Quantity<TemperatureUnit> f =
+                 new Quantity<>(32, TemperatureUnit.FAHRENHEIT);
 
-         Quantity<LengthUnit> result2 = length1.subtract(length2);
-         System.out.println("Subtraction: " + result2);
+         System.out.println("Equality: " + c.equals(f));
 
-         double ratio = length1.divide(length2);
-         System.out.println("Division Ratio: " + ratio);
+         Quantity<TemperatureUnit> converted =
+                 c.convertTo(TemperatureUnit.FAHRENHEIT);
 
-         Quantity<WeightUnit> weight1 = new Quantity<>(1, WeightUnit.KILOGRAM);
-         Quantity<WeightUnit> weight2 = new Quantity<>(1000, WeightUnit.GRAM);
+         System.out.println("Converted: " + converted);
 
-         System.out.println("Weight Equal: " + weight1.equals(weight2));
-
-         Quantity<VolumeUnit> volume = new Quantity<>(1, VolumeUnit.LITRE);
-         System.out.println("Convert to ml: " + volume.convertTo(VolumeUnit.MILLILITRE));
+         try {
+             c.add(new Quantity<>(50, TemperatureUnit.CELSIUS));
+         } catch (Exception e) {
+             System.out.println(e.getMessage());
+         }
+     }
     }
 }

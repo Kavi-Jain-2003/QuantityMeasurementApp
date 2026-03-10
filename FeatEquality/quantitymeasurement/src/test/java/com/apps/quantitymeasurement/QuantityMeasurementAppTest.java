@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class QuantityMeasurementAppTest {
-	  @Test
+	 @Test
 	    void testEquality_FeetToFeet_SameValue() {
 	        Length l1 = new Length(1.0, LengthUnit.FEET);
 	        Length l2 = new Length(1.0, LengthUnit.FEET);
@@ -69,9 +69,12 @@ class QuantityMeasurementAppTest {
 
 	    @Test
 	    void testEquality_NullUnit() {
-	        assertThrows(NullPointerException.class, () -> {
+
+	        Exception exception = assertThrows(NullPointerException.class, () -> {
 	            new Length(1.0, null);
 	        });
+
+	        assertNotNull(exception);
 	    }
 
 	    @Test
@@ -80,5 +83,4 @@ class QuantityMeasurementAppTest {
 	            LengthUnit.valueOf("INVALID");
 	        });
 	    }
-	    
-}
+	}

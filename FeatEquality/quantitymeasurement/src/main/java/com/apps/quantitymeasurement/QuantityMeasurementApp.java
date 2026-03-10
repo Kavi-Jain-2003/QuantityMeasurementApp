@@ -2,12 +2,12 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-	  // Generic equality method
+	 // Generic method for Length equality
     public static boolean demonstrateLengthEquality(Length length1, Length length2) {
         return length1.equals(length2);
     }
 
-    // UC1: Feet equality
+    // Demonstrate Feet equality
     public static void demonstrateFeetEquality() {
 
         Length length1 = new Length(1.0, LengthUnit.FEET);
@@ -17,7 +17,7 @@ public class QuantityMeasurementApp {
                 demonstrateLengthEquality(length1, length2));
     }
 
-    // UC2: Inches equality
+    // Demonstrate Inches equality
     public static void demonstrateInchesEquality() {
 
         Length length1 = new Length(1.0, LengthUnit.INCHES);
@@ -27,16 +27,17 @@ public class QuantityMeasurementApp {
                 demonstrateLengthEquality(length1, length2));
     }
 
-    // UC3: Feet to Inches comparison
+    // Demonstrate Feet ↔ Inches comparison
     public static void demonstrateFeetInchesComparison() {
 
         Length length1 = new Length(1.0, LengthUnit.FEET);
         Length length2 = new Length(12.0, LengthUnit.INCHES);
 
-        System.out.println("Feet-Inches comparison: " +
+        System.out.println("Feet to Inches comparison: " +
                 demonstrateLengthEquality(length1, length2));
     }
 
+    // Main method
     public static void main(String[] args) {
 
         demonstrateFeetEquality();

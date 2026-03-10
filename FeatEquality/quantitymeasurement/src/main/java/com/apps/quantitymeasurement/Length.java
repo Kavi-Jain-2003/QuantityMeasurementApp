@@ -8,7 +8,7 @@ public class Length {
     public Length(double value, LengthUnit unit) {
 
         if (unit == null)
-            throw new NullPointerException("Units cannot be null");
+            throw new NullPointerException("Unit cannot be null");
 
         this.value = value;
         this.unit = unit;

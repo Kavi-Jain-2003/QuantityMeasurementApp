@@ -79,4 +79,51 @@ public class Quantity<U extends IMeasurable> {
         double resultValue = targetUnit.convertFromBaseUnit(sumBase);
         return new Quantity<>(resultValue, targetUnit);
     }
+ // subtract result in this unit
+    public Quantity<U> subtract(Quantity<U> other) {
+        return subtract(other, this.unit);
+    }
+
+    // subtract result in target unit
+    public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
+
+        if (other == null)
+            throw new IllegalArgumentException("Second operand cannot be null");
+
+        if (targetUnit == null)
+            throw new IllegalArgumentException("Target unit cannot be null");
+
+        if (!this.unit.getClass().equals(other.unit.getClass()))
+            throw new IllegalArgumentException("Different measurement categories");
+
+        double baseThis = this.unit.convertToBaseUnit(this.value);
+        double baseOther = other.unit.convertToBaseUnit(other.value);
+
+        double baseResult = baseThis - baseOther;
+
+        double resultValue = targetUnit.convertFromBaseUnit(baseResult);
+
+        // rounding to 2 decimal places
+        resultValue = Math.round(resultValue * 100.0) / 100.0;
+
+        return new Quantity<>(resultValue, targetUnit);
+    }
+    public double divide(Quantity<U> other) {
+
+        if (other == null)
+            throw new IllegalArgumentException("Second operand cannot be null");
+
+        if (!this.unit.getClass().equals(other.unit.getClass()))
+            throw new IllegalArgumentException("Different measurement categories");
+
+        double baseThis = this.unit.convertToBaseUnit(this.value);
+        double baseOther = other.unit.convertToBaseUnit(other.value);
+
+        if (baseOther == 0)
+            throw new ArithmeticException("Division by zero");
+
+        return baseThis / baseOther;
+    }
+
+
 }

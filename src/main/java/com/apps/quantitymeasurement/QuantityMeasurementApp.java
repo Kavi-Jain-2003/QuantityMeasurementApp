@@ -32,6 +32,16 @@ public class QuantityMeasurementApp {
 
         Quantity<VolumeUnit> sumMl = v1.add(v3, VolumeUnit.MILLILITRE);
         System.out.println("Sum in mL: " + sumMl);
+        
+        Quantity<LengthUnit> l1 = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> l2 = new Quantity<>(6.0, LengthUnit.INCH);
+
+        Quantity<LengthUnit> diff = l1.subtract(l2);
+        System.out.println("Subtraction: " + diff);
+
+        double ratio = l1.divide(l2);
+        System.out.println("Division ratio: " + ratio);
+
 
     }
 }

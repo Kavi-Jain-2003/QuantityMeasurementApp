@@ -1,17 +1,15 @@
 package com.apps.quantitymeasurement;
-
 public enum LengthUnit {
+	FEET(1.0),
+    INCHES(1.0 / 12.0);
 
-    FEET(1.0),           // Base unit
-    INCH(1.0 / 12.0);    // 1 inch = 1/12 feet
+    private final double conversionFactor;
 
-    private final double conversionFactorToFeet;
-
-    LengthUnit(double conversionFactorToFeet) {
-        this.conversionFactorToFeet = conversionFactorToFeet;
+    LengthUnit(double conversionFactor) {
+        this.conversionFactor = conversionFactor;
     }
 
-    public double toFeet(double value) {
-        return value * conversionFactorToFeet;
+    public double getConversionFactor() {
+        return conversionFactor;
     }
 }

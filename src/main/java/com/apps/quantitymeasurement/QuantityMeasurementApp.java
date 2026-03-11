@@ -4,99 +4,65 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-//        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
-//        Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCH);
-//
-//        System.out.println("1 Foot equals 12 Inches: " + feet.equals(inches));
-//
-//        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-//        Quantity<WeightUnit> g = new Quantity<>(1000.0, WeightUnit.GRAM);
-//
-//        System.out.println("1 kg equals 1000 g: " + kg.equals(g));
-//
-//        Quantity<WeightUnit> sum = kg.add(new Quantity<>(500.0, WeightUnit.GRAM));
-//        System.out.println("Sum in default unit: " + sum);
-//
-//        Quantity<WeightUnit> sumInLb = kg.add(new Quantity<>(500.0, WeightUnit.GRAM), WeightUnit.POUND);
-//        System.out.println("Sum in Pounds: " + sumInLb);
-//        
-//        Quantity<VolumeUnit> v1 = new Quantity<>(1.0, VolumeUnit.LITRE);
-//        Quantity<VolumeUnit> v2 = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
-//        Quantity<VolumeUnit> v3 = new Quantity<>(1.0, VolumeUnit.GALLON);
-//
-//        System.out.println("1 L = 1000 mL: " + v1.equals(v2));
-//        System.out.println("1 Gallon in Litres: " + v3.convertTo(VolumeUnit.LITRE));
-//
-//        Quantity<VolumeUnit> sum = v1.add(v2);
-//        System.out.println("Sum: " + sum);
-//
-//        Quantity<VolumeUnit> sumMl = v1.add(v3, VolumeUnit.MILLILITRE);
-//        System.out.println("Sum in mL: " + sumMl);
-//        
-//        Quantity<LengthUnit> l1 = new Quantity<>(10.0, LengthUnit.FEET);
-//        Quantity<LengthUnit> l2 = new Quantity<>(6.0, LengthUnit.INCH);
-//
-//        Quantity<LengthUnit> diff = l1.subtract(l2);
-//        System.out.println("Subtraction: " + diff);
-//
-//        double ratio = l1.divide(l2);
-//        System.out.println("Division ratio: " + ratio);
-//    	Quantity<LengthUnit> length1 = new Quantity<>(10, LengthUnit.FEET);
-//        Quantity<LengthUnit> length2 = new Quantity<>(6, LengthUnit.INCH);
-//
-//        Quantity<LengthUnit> result1 = length1.add(length2);
-//        System.out.println("Addition: " + result1);
-//
-//        Quantity<LengthUnit> result2 = length1.subtract(length2);
-//        System.out.println("Subtraction: " + result2);
-//
-//        double ratio = length1.divide(length2);
-//        System.out.println("Division Ratio: " + ratio);
-//
-//        Quantity<WeightUnit> weight1 = new Quantity<>(1, WeightUnit.KILOGRAM);
-//        Quantity<WeightUnit> weight2 = new Quantity<>(1000, WeightUnit.GRAM);
-//
-//        System.out.println("Weight Equal: " + weight1.equals(weight2));
-//
-//        Quantity<VolumeUnit> volume = new Quantity<>(1, VolumeUnit.LITRE);
-//        System.out.println("Convert to ml: " + volume.convertTo(VolumeUnit.MILLILITRE));
-//    	 Quantity<LengthUnit> length1 = new Quantity<>(10, LengthUnit.FEET);
-//         Quantity<LengthUnit> length2 = new Quantity<>(6, LengthUnit.INCH);
-//
-//         Quantity<LengthUnit> result1 = length1.add(length2);
-//         System.out.println("Addition: " + result1);
-//
-//         Quantity<LengthUnit> result2 = length1.subtract(length2);
-//         System.out.println("Subtraction: " + result2);
-//
-//         double ratio = length1.divide(length2);
-//         System.out.println("Division Ratio: " + ratio);
-//
-//         Quantity<WeightUnit> weight1 = new Quantity<>(1, WeightUnit.KILOGRAM);
-//         Quantity<WeightUnit> weight2 = new Quantity<>(1000, WeightUnit.GRAM);
-//
-//         System.out.println("Weight Equal: " + weight1.equals(weight2));
-//
-//         Quantity<VolumeUnit> volume = new Quantity<>(1, VolumeUnit.LITRE);
-//         System.out.println("Convert to ml: " + volume.convertTo(VolumeUnit.MILLILITRE));
-         Quantity<TemperatureUnit> c =
-                 new Quantity<>(0, TemperatureUnit.CELSIUS);
+        // -------- LENGTH ADDITION --------
+        Quantity<LengthUnit> length1 =
+                new Quantity<>(1.0, LengthUnit.FEET);
 
-         Quantity<TemperatureUnit> f =
-                 new Quantity<>(32, TemperatureUnit.FAHRENHEIT);
+        Quantity<LengthUnit> length2 =
+                new Quantity<>(12.0, LengthUnit.INCHES);
 
-         System.out.println("Equality: " + c.equals(f));
+        System.out.println("Addition:");
+        System.out.println(length1.add(length2));
 
-         Quantity<TemperatureUnit> converted =
-                 c.convertTo(TemperatureUnit.FAHRENHEIT);
 
-         System.out.println("Converted: " + converted);
+        // -------- WEIGHT ADDITION --------
+        Quantity<WeightUnit> weight1 =
+                new Quantity<>(10.0, WeightUnit.KILOGRAM);
 
-         try {
-             c.add(new Quantity<>(50, TemperatureUnit.CELSIUS));
-         } catch (Exception e) {
-             System.out.println(e.getMessage());
-         }
-     }
+        Quantity<WeightUnit> weight2 =
+                new Quantity<>(5000.0, WeightUnit.GRAM);
+
+        System.out.println(weight1.add(weight2, WeightUnit.GRAM));
+
+
+        // -------- SUBTRACTION --------
+        Quantity<LengthUnit> length3 =
+                new Quantity<>(10.0, LengthUnit.FEET);
+
+        Quantity<LengthUnit> length4 =
+                new Quantity<>(6.0, LengthUnit.INCHES);
+
+        System.out.println("Subtraction:");
+        System.out.println(length3.subtract(length4));
+
+
+        // -------- VOLUME SUBTRACTION --------
+        Quantity<VolumeUnit> volume1 =
+                new Quantity<>(5.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> volume2 =
+                new Quantity<>(2.0, VolumeUnit.LITRE);
+
+        System.out.println(volume1.subtract(volume2, VolumeUnit.MILLILITRE));
+
+
+        // -------- DIVISION --------
+        Quantity<LengthUnit> d1 =
+                new Quantity<>(10.0, LengthUnit.FEET);
+
+        Quantity<LengthUnit> d2 =
+                new Quantity<>(2.0, LengthUnit.FEET);
+
+        System.out.println("Division:");
+        System.out.println(d1.divide(d2));
+
+
+        Quantity<LengthUnit> d3 =
+                new Quantity<>(24.0, LengthUnit.INCHES);
+
+        Quantity<LengthUnit> d4 =
+                new Quantity<>(2.0, LengthUnit.FEET);
+
+        System.out.println(d3.divide(d4));
     }
 }

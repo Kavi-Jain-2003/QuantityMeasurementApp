@@ -1,16 +1,27 @@
 package com.apps.quantitymeasurement;
 
+@FunctionalInterface
+interface SupportsArithmetic {
+    boolean isSupported();
+}
+
 public interface IMeasurable {
 
-    // Returns the conversion factor relative to the base unit
-    double getConversionFactor();
-
-    // Convert value in this unit to base unit
+    // Mandatory methods (already implemented by enums)
     double convertToBaseUnit(double value);
 
-    // Convert value from base unit to this unit
-    double convertFromBaseUnit(double baseValue);
+    double convertFromBaseUnit(double value);
 
-    // Returns a readable unit name
-    String getUnitName();
+    // Default lambda: arithmetic supported
+    SupportsArithmetic supportsArithmetic = () -> true;
+
+    // Default method
+    default boolean supportsArithmetic() {
+        return supportsArithmetic.isSupported();
+    }
+
+    // Default validation method
+    default void validateOperationSupport(String operation) {
+        // Do nothing by default
+    }
 }

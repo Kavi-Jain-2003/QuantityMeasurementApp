@@ -2,50 +2,122 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-//        // UC1–UC4 Equality Demo
-//        QuantityLength feet = new QuantityLength(1.0, LengthUnit.FEET);
-//        QuantityLength inches = new QuantityLength(12.0, LengthUnit.INCH);
-//
-//        System.out.println("1 Foot equals 12 Inches: " + feet.equals(inches));
-//
-//        // UC5 Conversion Demo
-//        System.out.println("1 Foot in Inches: " + QuantityLength.convert(1.0, LengthUnit.FEET, LengthUnit.INCH));
-//        System.out.println("3 Yards in Feet: " + QuantityLength.convert(3.0, LengthUnit.YARD, LengthUnit.FEET));
-//        System.out.println("2.54 cm in Inches: " + QuantityLength.convert(2.54, LengthUnit.CENTIMETER, LengthUnit.INCH));
-//
-//        // UC6 Addition Demo
-//        QuantityLength a = new QuantityLength(1.0, LengthUnit.FEET);
-//        QuantityLength b = new QuantityLength(12.0, LengthUnit.INCH);
-//
-//        System.out.println("Sum in default unit: " + a.add(b));
-//
-//        // UC7 Addition with target unit
-//        System.out.println("Sum in Feet: " + a.add(b, LengthUnit.FEET));
-//        System.out.println("Sum in Inches: " + a.add(b, LengthUnit.INCH));
-//        System.out.println("Sum in Yards: " + a.add(b, LengthUnit.YARD));
+        // LENGTH DEMOS
+        lengthEqualityDemo();
+        lengthConversionDemo();
+        lengthAdditionDemo();
+        lengthAdditionTargetUnitDemo();
+        lengthUnitConversionMethodsDemo();
+        lengthCrossUnitEqualityDemo();
 
-		// Weight equality
-		Weight kg = new Weight(1.0, WeightUnit.KILOGRAM);
-		Weight g = new Weight(1000.0, WeightUnit.GRAM);
-		Weight lb = new Weight(2.20462, WeightUnit.POUND);
+        // WEIGHT DEMOS
+        weightEqualityDemo();
+        weightConversionDemo();
+        weightAdditionDemo();
+        weightAdditionTargetUnitDemo();
+        weightCrossUnitEqualityDemo();
+        weightUnitConversionMethodsDemo();
+    }
 
-		System.out.println("1 kg equals 1000 g: " + kg.equals(g));
-		System.out.println("1 kg equals 2.20462 lb: " + kg.equals(lb));
+    // ---------- LENGTH METHODS ----------
 
-		// Conversion
-		System.out.println("2 lb in kg: " + new Weight(2.0, WeightUnit.POUND).convertTo(WeightUnit.KILOGRAM));
-		System.out.println("500 g in lb: " + new Weight(500.0, WeightUnit.GRAM).convertTo(WeightUnit.POUND));
+    static void lengthEqualityDemo() {
 
-		// Addition
-		Weight w1 = new Weight(1.0, WeightUnit.KILOGRAM);
-		Weight w2 = new Weight(500.0, WeightUnit.GRAM);
+        Length l1 = new Length(1, LengthUnit.FEET);
+        Length l2 = new Length(12, LengthUnit.INCHES);
 
-		Weight sumDefault = w1.add(w2); // result in w1's unit
-		Weight sumInLb = w1.add(w2, WeightUnit.POUND);
+        System.out.println("Length Equality: " + l1.equals(l2));
+    }
 
-		System.out.println("Sum in default unit: " + sumDefault);
-		System.out.println("Sum in Pounds: " + sumInLb);
-	}
+    static void lengthConversionDemo() {
+
+        Length l = new Length(1, LengthUnit.FEET);
+
+        System.out.println(l.convertTo(LengthUnit.INCHES));
+    }
+
+    static void lengthAdditionDemo() {
+
+        Length l1 = new Length(1, LengthUnit.FEET);
+        Length l2 = new Length(12, LengthUnit.INCHES);
+
+        System.out.println(l1.add(l2));
+    }
+
+    static void lengthAdditionTargetUnitDemo() {
+
+        Length l1 = new Length(1, LengthUnit.FEET);
+        Length l2 = new Length(12, LengthUnit.INCHES);
+
+        System.out.println(l1.add(l2, LengthUnit.YARDS));
+    }
+
+    static void lengthUnitConversionMethodsDemo() {
+
+        System.out.println(
+                LengthUnit.INCHES.convertToBaseUnit(12));
+
+        System.out.println(
+                LengthUnit.INCHES.convertFromBaseUnit(1));
+    }
+
+    static void lengthCrossUnitEqualityDemo() {
+
+        Length l1 = new Length(36, LengthUnit.INCHES);
+        Length l2 = new Length(1, LengthUnit.YARDS);
+
+        System.out.println(l1.equals(l2));
+    }
+
+    // ---------- WEIGHT METHODS ----------
+
+    static void weightEqualityDemo() {
+
+        Weight w1 = new Weight(1, WeightUnit.KILOGRAM);
+        Weight w2 = new Weight(1000, WeightUnit.GRAM);
+
+        System.out.println("Weight Equality: " + w1.equals(w2));
+    }
+
+    static void weightConversionDemo() {
+
+        Weight w = new Weight(1, WeightUnit.KILOGRAM);
+
+        System.out.println(w.convertTo(WeightUnit.GRAM));
+    }
+
+    static void weightAdditionDemo() {
+
+        Weight w1 = new Weight(1, WeightUnit.KILOGRAM);
+        Weight w2 = new Weight(1000, WeightUnit.GRAM);
+
+        System.out.println(w1.add(w2));
+    }
+
+    static void weightAdditionTargetUnitDemo() {
+
+        Weight w1 = new Weight(1, WeightUnit.KILOGRAM);
+        Weight w2 = new Weight(1000, WeightUnit.GRAM);
+
+        System.out.println(w1.add(w2, WeightUnit.GRAM));
+    }
+
+    static void weightCrossUnitEqualityDemo() {
+
+        Weight w1 = new Weight(1, WeightUnit.POUND);
+        Weight w2 = new Weight(453.592, WeightUnit.GRAM);
+
+        System.out.println(w1.equals(w2));
+    }
+
+    static void weightUnitConversionMethodsDemo() {
+
+        System.out.println(
+                WeightUnit.POUND.convertToBaseUnit(1));
+
+        System.out.println(
+                WeightUnit.POUND.convertFromBaseUnit(1));
+    }
 }

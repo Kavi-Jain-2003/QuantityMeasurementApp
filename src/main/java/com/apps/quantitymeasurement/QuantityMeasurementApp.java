@@ -2,64 +2,85 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
+    /* 1 Equality */
+    public static void demonstrateEquality() {
+
+        Quantity<LengthUnit> q1 = new Quantity<>(12.0, LengthUnit.INCHES);
+        Quantity<LengthUnit> q2 = new Quantity<>(1.0, LengthUnit.FEET);
+
+        System.out.println("Equality Demonstration: " + q1.equals(q2));
+    }
+
+    /* 2 Conversion */
+    public static void demonstrateConversion() {
+
+        Quantity<LengthUnit> q = new Quantity<>(1.0, LengthUnit.FEET);
+
+        double inches = LengthUnit.INCHES.convertFromBaseUnit(
+                LengthUnit.FEET.convertToBaseUnit(q.getValue()));
+
+        System.out.println("Conversion Demonstration: 1 FEET = " + inches + " INCHES");
+    }
+
+    /* 3 Addition (implicit unit) */
+    public static void demonstrateAdditionImplicit() {
+
+        Quantity<LengthUnit> q1 = new Quantity<>(5.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(6.0, LengthUnit.INCHES);
+
+        System.out.println("Addition (Implicit Unit): " + q1.add(q2));
+    }
+
+    /* 4 Addition (explicit unit) */
+    public static void demonstrateAdditionExplicit() {
+
+        Quantity<LengthUnit> q1 = new Quantity<>(5.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(6.0, LengthUnit.INCHES);
+
+        System.out.println("Addition (Explicit Unit): "
+                + q1.add(q2, LengthUnit.INCHES));
+    }
+
+    /* 5 Subtraction (implicit unit) */
+    public static void demonstrateSubtractionImplicit() {
+
+        Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(6.0, LengthUnit.INCHES);
+
+        System.out.println("Subtraction (Implicit Unit): " + q1.subtract(q2));
+    }
+
+    /* 6 Subtraction (explicit unit) */
+    public static void demonstrateSubtractionExplicit() {
+
+        Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(6.0, LengthUnit.INCHES);
+
+        System.out.println("Subtraction (Explicit Unit): "
+                + q1.subtract(q2, LengthUnit.INCHES));
+    }
+
+    /* 7 Division */
+    public static void demonstrateDivision() {
+
+        Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(2.0, LengthUnit.FEET);
+
+        System.out.println("Division Demonstration: " + q1.divide(q2));
+    }
+
+
     public static void main(String[] args) {
 
-//        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
-//        Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCH);
-//
-//        System.out.println("1 Foot equals 12 Inches: " + feet.equals(inches));
-//
-//        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-//        Quantity<WeightUnit> g = new Quantity<>(1000.0, WeightUnit.GRAM);
-//
-//        System.out.println("1 kg equals 1000 g: " + kg.equals(g));
-//
-//        Quantity<WeightUnit> sum = kg.add(new Quantity<>(500.0, WeightUnit.GRAM));
-//        System.out.println("Sum in default unit: " + sum);
-//
-//        Quantity<WeightUnit> sumInLb = kg.add(new Quantity<>(500.0, WeightUnit.GRAM), WeightUnit.POUND);
-//        System.out.println("Sum in Pounds: " + sumInLb);
-//        
-//        Quantity<VolumeUnit> v1 = new Quantity<>(1.0, VolumeUnit.LITRE);
-//        Quantity<VolumeUnit> v2 = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
-//        Quantity<VolumeUnit> v3 = new Quantity<>(1.0, VolumeUnit.GALLON);
-//
-//        System.out.println("1 L = 1000 mL: " + v1.equals(v2));
-//        System.out.println("1 Gallon in Litres: " + v3.convertTo(VolumeUnit.LITRE));
-//
-//        Quantity<VolumeUnit> sum = v1.add(v2);
-//        System.out.println("Sum: " + sum);
-//
-//        Quantity<VolumeUnit> sumMl = v1.add(v3, VolumeUnit.MILLILITRE);
-//        System.out.println("Sum in mL: " + sumMl);
-//        
-//        Quantity<LengthUnit> l1 = new Quantity<>(10.0, LengthUnit.FEET);
-//        Quantity<LengthUnit> l2 = new Quantity<>(6.0, LengthUnit.INCH);
-//
-//        Quantity<LengthUnit> diff = l1.subtract(l2);
-//        System.out.println("Subtraction: " + diff);
-//
-//        double ratio = l1.divide(l2);
-//        System.out.println("Division ratio: " + ratio);
-    	Quantity<LengthUnit> length1 = new Quantity<>(10, LengthUnit.FEET);
-        Quantity<LengthUnit> length2 = new Quantity<>(6, LengthUnit.INCH);
+        demonstrateEquality();
+        demonstrateConversion();
 
-        Quantity<LengthUnit> result1 = length1.add(length2);
-        System.out.println("Addition: " + result1);
+        demonstrateAdditionImplicit();
+        demonstrateAdditionExplicit();
 
-        Quantity<LengthUnit> result2 = length1.subtract(length2);
-        System.out.println("Subtraction: " + result2);
+        demonstrateSubtractionImplicit();
+        demonstrateSubtractionExplicit();
 
-        double ratio = length1.divide(length2);
-        System.out.println("Division Ratio: " + ratio);
-
-        Quantity<WeightUnit> weight1 = new Quantity<>(1, WeightUnit.KILOGRAM);
-        Quantity<WeightUnit> weight2 = new Quantity<>(1000, WeightUnit.GRAM);
-
-        System.out.println("Weight Equal: " + weight1.equals(weight2));
-
-        Quantity<VolumeUnit> volume = new Quantity<>(1, VolumeUnit.LITRE);
-        System.out.println("Convert to ml: " + volume.convertTo(VolumeUnit.MILLILITRE));
-
+        demonstrateDivision();
     }
 }

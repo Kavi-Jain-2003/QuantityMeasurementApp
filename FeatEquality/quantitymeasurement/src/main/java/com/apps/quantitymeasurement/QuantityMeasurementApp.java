@@ -2,22 +2,57 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
+    // 1️ Equality
+    public static <U extends IMeasurable> void demonstrateEquality(
+            Quantity<U> q1,
+            Quantity<U> q2) {
+
+        System.out.println(q1 + " equals " + q2 + " : " + q1.equals(q2));
+    }
+
+    // 2️ Conversion
+    public static <U extends IMeasurable> void demonstrateConversion(
+            Quantity<U> quantity,
+            U targetUnit) {
+
+        System.out.println(quantity + " -> " + quantity.convertTo(targetUnit));
+    }
+
+    // 3️ Addition (implicit unit)
+    public static <U extends IMeasurable> void demonstrateAddition(
+            Quantity<U> q1,
+            Quantity<U> q2) {
+
+        System.out.println(q1 + " + " + q2 + " = " + q1.add(q2));
+    }
+
+    // 4️ Addition (explicit unit)
+    public static <U extends IMeasurable> void demonstrateAdditionWithTarget(
+            Quantity<U> q1,
+            Quantity<U> q2,
+            U targetUnit) {
+
+        System.out.println(q1 + " + " + q2 + " = " + q1.add(q2, targetUnit));
+    }
+
     public static void main(String[] args) {
 
-        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
-        Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCH);
+        // LENGTH
+        Quantity<LengthUnit> l1 = new Quantity<>(1, LengthUnit.FEET);
+        Quantity<LengthUnit> l2 = new Quantity<>(12, LengthUnit.INCHES);
 
-        System.out.println("1 Foot equals 12 Inches: " + feet.equals(inches));
+        demonstrateEquality(l1, l2);
+        demonstrateConversion(l1, LengthUnit.INCHES);
+        demonstrateAddition(l1, l2);
+        demonstrateAdditionWithTarget(l1, l2, LengthUnit.FEET);
 
-        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-        Quantity<WeightUnit> g = new Quantity<>(1000.0, WeightUnit.GRAM);
+        // WEIGHT
+        Quantity<WeightUnit> w1 = new Quantity<>(1, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> w2 = new Quantity<>(1000, WeightUnit.GRAM);
 
-        System.out.println("1 kg equals 1000 g: " + kg.equals(g));
-
-        Quantity<WeightUnit> sum = kg.add(new Quantity<>(500.0, WeightUnit.GRAM));
-        System.out.println("Sum in default unit: " + sum);
-
-        Quantity<WeightUnit> sumInLb = kg.add(new Quantity<>(500.0, WeightUnit.GRAM), WeightUnit.POUND);
-        System.out.println("Sum in Pounds: " + sumInLb);
+        demonstrateEquality(w1, w2);
+        demonstrateConversion(w1, WeightUnit.GRAM);
+        demonstrateAddition(w1, w2);
+        demonstrateAdditionWithTarget(w1, w2, WeightUnit.KILOGRAM);
     }
 }

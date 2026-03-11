@@ -4,34 +4,92 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-//        Quantity<LengthUnit> feet = new Quantity<>(1.0, LengthUnit.FEET);
-//        Quantity<LengthUnit> inches = new Quantity<>(12.0, LengthUnit.INCH);
-//
-//        System.out.println("1 Foot equals 12 Inches: " + feet.equals(inches));
-//
-//        Quantity<WeightUnit> kg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-//        Quantity<WeightUnit> g = new Quantity<>(1000.0, WeightUnit.GRAM);
-//
-//        System.out.println("1 kg equals 1000 g: " + kg.equals(g));
-//
-//        Quantity<WeightUnit> sum = kg.add(new Quantity<>(500.0, WeightUnit.GRAM));
-//        System.out.println("Sum in default unit: " + sum);
-//
-//        Quantity<WeightUnit> sumInLb = kg.add(new Quantity<>(500.0, WeightUnit.GRAM), WeightUnit.POUND);
-//        System.out.println("Sum in Pounds: " + sumInLb);
-//        
-        Quantity<VolumeUnit> v1 = new Quantity<>(1.0, VolumeUnit.LITRE);
-        Quantity<VolumeUnit> v2 = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
-        Quantity<VolumeUnit> v3 = new Quantity<>(1.0, VolumeUnit.GALLON);
+        demonstrateLengthOperations();
+        demonstrateWeightOperations();
+        demonstrateVolumeOperations();
+    }
 
-        System.out.println("1 L = 1000 mL: " + v1.equals(v2));
-        System.out.println("1 Gallon in Litres: " + v3.convertTo(VolumeUnit.LITRE));
+    // ---------------- LENGTH DEMO ----------------
 
-        Quantity<VolumeUnit> sum = v1.add(v2);
-        System.out.println("Sum: " + sum);
+    public static void demonstrateLengthOperations() {
 
-        Quantity<VolumeUnit> sumMl = v1.add(v3, VolumeUnit.MILLILITRE);
-        System.out.println("Sum in mL: " + sumMl);
+        System.out.println("----- Length Demonstration -----");
 
+        Quantity<LengthUnit> length1 =
+                new Quantity<>(1.0, LengthUnit.FEET);
+
+        Quantity<LengthUnit> length2 =
+                new Quantity<>(12.0, LengthUnit.INCHES);
+
+        System.out.println("Are 1 Foot and 12 Inches equal? "
+                + length1.equals(length2));
+
+        Quantity<LengthUnit> converted =
+                length1.convertTo(LengthUnit.INCHES);
+
+        System.out.println("1 Foot in Inches: "
+                + converted.getValue());
+
+        Quantity<LengthUnit> result =
+                length1.add(length2);
+
+        System.out.println("1 Foot + 12 Inches = "
+                + result.getValue() + " " + result.getUnit());
+    }
+
+    // ---------------- WEIGHT DEMO ----------------
+
+    public static void demonstrateWeightOperations() {
+
+        System.out.println("\n----- Weight Demonstration -----");
+
+        Quantity<WeightUnit> weight1 =
+                new Quantity<>(1.0, WeightUnit.KILOGRAM);
+
+        Quantity<WeightUnit> weight2 =
+                new Quantity<>(1000.0, WeightUnit.GRAM);
+
+        System.out.println("Are 1 Kg and 1000 g equal? "
+                + weight1.equals(weight2));
+
+        Quantity<WeightUnit> converted =
+                weight1.convertTo(WeightUnit.GRAM);
+
+        System.out.println("1 Kg in Grams: "
+                + converted.getValue());
+
+        Quantity<WeightUnit> result =
+                weight1.add(weight2);
+
+        System.out.println("1 Kg + 1000 g = "
+                + result.getValue() + " " + result.getUnit());
+    }
+
+    // ---------------- VOLUME DEMO ----------------
+
+    public static void demonstrateVolumeOperations() {
+
+        System.out.println("\n----- Volume Demonstration -----");
+
+        Quantity<VolumeUnit> volume1 =
+                new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> volume2 =
+                new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+
+        System.out.println("Are 1 Litre and 1000 ml equal? "
+                + volume1.equals(volume2));
+
+        Quantity<VolumeUnit> converted =
+                volume1.convertTo(VolumeUnit.MILLILITRE);
+
+        System.out.println("1 Litre in Millilitres: "
+                + converted.getValue());
+
+        Quantity<VolumeUnit> result =
+                volume1.add(volume2);
+
+        System.out.println("1 Litre + 1000 ml = "
+                + result.getValue() + " " + result.getUnit());
     }
 }

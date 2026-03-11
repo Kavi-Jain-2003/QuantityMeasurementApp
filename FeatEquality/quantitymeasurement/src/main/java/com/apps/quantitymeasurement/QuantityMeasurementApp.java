@@ -27,23 +27,23 @@ public class QuantityMeasurementApp {
 //        System.out.println("Sum in Yards: " + a.add(b, LengthUnit.YARD));
 
 		// Weight equality
-		QuantityWeight kg = new QuantityWeight(1.0, WeightUnit.KILOGRAM);
-		QuantityWeight g = new QuantityWeight(1000.0, WeightUnit.GRAM);
-		QuantityWeight lb = new QuantityWeight(2.20462, WeightUnit.POUND);
+		Weight kg = new Weight(1.0, WeightUnit.KILOGRAM);
+		Weight g = new Weight(1000.0, WeightUnit.GRAM);
+		Weight lb = new Weight(2.20462, WeightUnit.POUND);
 
 		System.out.println("1 kg equals 1000 g: " + kg.equals(g));
 		System.out.println("1 kg equals 2.20462 lb: " + kg.equals(lb));
 
 		// Conversion
-		System.out.println("2 lb in kg: " + new QuantityWeight(2.0, WeightUnit.POUND).convertTo(WeightUnit.KILOGRAM));
-		System.out.println("500 g in lb: " + new QuantityWeight(500.0, WeightUnit.GRAM).convertTo(WeightUnit.POUND));
+		System.out.println("2 lb in kg: " + new Weight(2.0, WeightUnit.POUND).convertTo(WeightUnit.KILOGRAM));
+		System.out.println("500 g in lb: " + new Weight(500.0, WeightUnit.GRAM).convertTo(WeightUnit.POUND));
 
 		// Addition
-		QuantityWeight w1 = new QuantityWeight(1.0, WeightUnit.KILOGRAM);
-		QuantityWeight w2 = new QuantityWeight(500.0, WeightUnit.GRAM);
+		Weight w1 = new Weight(1.0, WeightUnit.KILOGRAM);
+		Weight w2 = new Weight(500.0, WeightUnit.GRAM);
 
-		QuantityWeight sumDefault = w1.add(w2); // result in w1's unit
-		QuantityWeight sumInLb = w1.add(w2, WeightUnit.POUND);
+		Weight sumDefault = w1.add(w2); // result in w1's unit
+		Weight sumInLb = w1.add(w2, WeightUnit.POUND);
 
 		System.out.println("Sum in default unit: " + sumDefault);
 		System.out.println("Sum in Pounds: " + sumInLb);

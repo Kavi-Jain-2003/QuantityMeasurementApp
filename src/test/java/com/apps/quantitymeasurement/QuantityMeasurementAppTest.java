@@ -1,6 +1,13 @@
 package com.apps.quantitymeasurement;
 
 import org.junit.jupiter.api.Test;
+
+import com.apps.quantitymeasurement.dto.QuantityDTO;
+import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
+import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
+import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementAppTest {
@@ -191,4 +198,95 @@ public class QuantityMeasurementAppTest {
 
         assertNotEquals(temp, length);
     }
+ // ---------------- UC15 SERVICE LAYER TESTS ----------------
+
+    @Test
+    void testService_Addition_Length() {
+
+        IQuantityMeasurementRepository repository =
+                QuantityMeasurementCacheRepository.getInstance();
+
+        IQuantityMeasurementService service =
+                new QuantityMeasurementServiceImpl(repository);
+
+        QuantityDTO q1 = new QuantityDTO(1, "FEET");
+        QuantityDTO q2 = new QuantityDTO(12, "INCHES");
+
+        QuantityDTO result = service.add(q1, q2);
+
+        assertEquals(2.0, result.getValue(), 0.001);
+        assertEquals("FEET", result.getUnit());
+    }
+
+
+    @Test
+    void testService_Subtraction_Length() {
+
+        IQuantityMeasurementRepository repository =
+                QuantityMeasurementCacheRepository.getInstance();
+
+        IQuantityMeasurementService service =
+                new QuantityMeasurementServiceImpl(repository);
+
+        QuantityDTO q1 = new QuantityDTO(2, "FEET");
+        QuantityDTO q2 = new QuantityDTO(12, "INCHES");
+
+        QuantityDTO result = service.subtract(q1, q2);
+
+        assertEquals(1.0, result.getValue(), 0.001);
+    }
+
+
+    @Test
+    void testService_Divide_Length() {
+
+        IQuantityMeasurementRepository repository =
+                QuantityMeasurementCacheRepository.getInstance();
+
+        IQuantityMeasurementService service =
+                new QuantityMeasurementServiceImpl(repository);
+
+        QuantityDTO q1 = new QuantityDTO(10, "FEET");
+        QuantityDTO q2 = new QuantityDTO(2, "FEET");
+
+        double result = service.divide(q1, q2);
+
+        assertEquals(5.0, result);
+    }
+
+
+    @Test
+    void testService_Compare_Length() {
+
+        IQuantityMeasurementRepository repository =
+                QuantityMeasurementCacheRepository.getInstance();
+
+        IQuantityMeasurementService service =
+                new QuantityMeasurementServiceImpl(repository);
+
+        QuantityDTO q1 = new QuantityDTO(1, "FEET");
+        QuantityDTO q2 = new QuantityDTO(12, "INCHES");
+
+        boolean result = service.compare(q1, q2);
+
+        assertTrue(result);
+    }
+
+
+    @Test
+    void testService_Convert_Length() {
+
+        IQuantityMeasurementRepository repository =
+                QuantityMeasurementCacheRepository.getInstance();
+
+        IQuantityMeasurementService service =
+                new QuantityMeasurementServiceImpl(repository);
+
+        QuantityDTO q = new QuantityDTO(1, "FEET");
+
+        QuantityDTO result = service.convert(q, "INCHES");
+
+        assertEquals(12.0, result.getValue(), 0.001);
+    }
+
 }

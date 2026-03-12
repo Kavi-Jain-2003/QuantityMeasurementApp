@@ -1,35 +1,26 @@
 package com.apps.quantitymeasurement;
 
+import com.apps.quantitymeasurement.controller.QuantityMeasurementController;
+import com.apps.quantitymeasurement.dto.QuantityDTO;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
+import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
+
 public class QuantityMeasurementApp {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		// -------- Temperature Equality --------
-		Quantity<TemperatureUnit> t1 = new Quantity<>(0, TemperatureUnit.CELSIUS);
+        QuantityMeasurementCacheRepository repository =
+                QuantityMeasurementCacheRepository.getInstance();
 
-		Quantity<TemperatureUnit> t2 = new Quantity<>(32, TemperatureUnit.FAHRENHEIT);
+        QuantityMeasurementServiceImpl service =
+                new QuantityMeasurementServiceImpl(repository);
 
-		System.out.println("Temperature Equality:");
-		System.out.println(t1.equals(t2));
+        QuantityMeasurementController controller =
+                new QuantityMeasurementController(service);
 
-		// -------- Temperature Conversion --------
-		Quantity<TemperatureUnit> temp = new Quantity<>(100, TemperatureUnit.CELSIUS);
+        QuantityDTO q1 = new QuantityDTO(1, "FEET");
+        QuantityDTO q2 = new QuantityDTO(12, "INCHES");
 
-		System.out.println("Convert to Fahrenheit:");
-		System.out.println(temp.convertTo(TemperatureUnit.FAHRENHEIT));
-
-		// -------- Unsupported Operation --------
-		try {
-
-			Quantity<TemperatureUnit> a = new Quantity<>(100, TemperatureUnit.CELSIUS);
-
-			Quantity<TemperatureUnit> b = new Quantity<>(50, TemperatureUnit.CELSIUS);
-
-			System.out.println(a.add(b));
-
-		} catch (UnsupportedOperationException e) {
-
-			System.out.println(e.getMessage());
-		}
-	}
+        controller.performAddition(q1, q2);
+    }
 }

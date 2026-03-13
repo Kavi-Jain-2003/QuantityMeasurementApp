@@ -1,11 +1,8 @@
 package com.apps.quantitymeasurement.service;
 
 import com.apps.quantitymeasurement.*;
-
 import com.apps.quantitymeasurement.dto.QuantityDTO;
 import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
-import com.apps.quantitymeasurement.unit.LengthUnit;
-import com.apps.quantitymeasurement.unit.Quantity;
 
 public class QuantityMeasurementServiceImpl
         implements IQuantityMeasurementService {

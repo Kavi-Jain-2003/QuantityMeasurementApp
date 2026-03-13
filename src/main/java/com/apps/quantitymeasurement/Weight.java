@@ -1,14 +1,15 @@
-package com.apps.quantitymeasurement.unit;
+package com.apps.quantitymeasurement;
 
 import java.util.Objects;
 
-public class Length {
+public class Weight {
 
     private final double value;
-    private final LengthUnit unit;
+    private final WeightUnit unit;
+
     private static final double EPSILON = 0.0001;
 
-    public Length(double value, LengthUnit unit) {
+    public Weight(double value, WeightUnit unit) {
 
         if (unit == null)
             throw new IllegalArgumentException("Unit cannot be null");
@@ -20,35 +21,15 @@ public class Length {
         this.unit = unit;
     }
 
-    public double getValue() {
-        return value;
-    }
-
-    public LengthUnit getUnit() {
-        return unit;
-    }
-
-    // UC4 conversion
-    public static double convert(double value, LengthUnit from, LengthUnit to) {
-
-        if (from == null || to == null)
-            throw new IllegalArgumentException("Unit cannot be null");
-
-        double base = from.convertToBaseUnit(value);
-        return to.convertFromBaseUnit(base);
-    }
-
-    // UC8 convertTo
-    public Length convertTo(LengthUnit targetUnit) {
+    public Weight convertTo(WeightUnit targetUnit) {
 
         double base = unit.convertToBaseUnit(value);
         double converted = targetUnit.convertFromBaseUnit(base);
 
-        return new Length(converted, targetUnit);
+        return new Weight(converted, targetUnit);
     }
 
-    // UC6 addition
-    public Length add(Length other) {
+    public Weight add(Weight other) {
 
         double base1 = unit.convertToBaseUnit(value);
         double base2 = other.unit.convertToBaseUnit(other.value);
@@ -57,11 +38,10 @@ public class Length {
 
         double result = unit.convertFromBaseUnit(sum);
 
-        return new Length(result, unit);
+        return new Weight(result, unit);
     }
 
-    // UC7 addition with target unit
-    public Length add(Length other, LengthUnit targetUnit) {
+    public Weight add(Weight other, WeightUnit targetUnit) {
 
         double base1 = unit.convertToBaseUnit(value);
         double base2 = other.unit.convertToBaseUnit(other.value);
@@ -70,16 +50,16 @@ public class Length {
 
         double result = targetUnit.convertFromBaseUnit(sum);
 
-        return new Length(result, targetUnit);
+        return new Weight(result, targetUnit);
     }
 
     @Override
     public boolean equals(Object obj) {
 
         if (this == obj) return true;
-        if (!(obj instanceof Length)) return false;
+        if (obj == null || getClass() != obj.getClass()) return false;
 
-        Length other = (Length) obj;
+        Weight other = (Weight) obj;
 
         double base1 = unit.convertToBaseUnit(value);
         double base2 = other.unit.convertToBaseUnit(other.value);

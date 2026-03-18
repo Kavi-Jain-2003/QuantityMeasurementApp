@@ -22,5 +22,7 @@ public class QuantityMeasurementApp {
         QuantityDTO q2 = new QuantityDTO(12, "INCHES");
 
         controller.performAddition(q1, q2);
+
+        System.out.println("Total Records Stored: " + repository.getTotalCount());
     }
 }

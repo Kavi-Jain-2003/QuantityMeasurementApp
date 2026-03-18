@@ -1,24 +1,36 @@
 package com.apps.quantitymeasurement.unit;
 
-public enum TemperatureUnit implements IMeasurable {
+import java.util.function.Function;
 
-    CELSIUS {
-        public double convertToBaseUnit(double value) { return value; }
-        public double convertFromBaseUnit(double value) { return value; }
-    },
+public enum TemperatureUnit implements IMeasurable{
+    CELSIUS(c -> c, c -> c),
+    FAHRENHEIT(f -> (f - 32) * 5 / 9, c -> (c * 9 / 5) + 32);
 
-    FAHRENHEIT {
-        public double convertToBaseUnit(double value) { return (value - 32) * 5 / 9; }
-        public double convertFromBaseUnit(double value) { return (value * 9 / 5) + 32; }
-    },
+    private final Function<Double, Double> toCelsius;
+    private final Function<Double, Double> fromCelsius;
 
-    KELVIN {
-        public double convertToBaseUnit(double value) { return value - 273.15; }
-        public double convertFromBaseUnit(double value) { return value + 273.15; }
-    };
+    private static final SupportsArithmetic supportsArithmetic = () -> false;
+
+    TemperatureUnit(Function<Double, Double> toCelsius, Function<Double, Double> fromCelsius) {
+        this.toCelsius = toCelsius;
+        this.fromCelsius = fromCelsius;
+    }
 
     @Override
-    public void validateOperationSupport(String operation) {
-        throw new UnsupportedOperationException("Temperature does not support " + operation);
+    public double convertToBase(double value){ return toCelsius.apply(value); }
+
+    @Override
+    public double convertFromBase(double baseValue){ return fromCelsius.apply(baseValue); }
+
+    @Override
+    public double getConversionFactor(){ return 1.0; }
+
+    @Override
+    public String getUnitName(){ return name(); }
+
+    @Override
+    public void validOperationSupport(String operation) {
+        if (supportsArithmetic.isSupported() == false)
+            throw new UnsupportedOperationException("Unsupportable Operation");
     }
 }

@@ -5,8 +5,8 @@ public enum LengthUnit {
 
     private final double convertToFeet;
 
-    LengthUnit(double convertToInch) {
-        this.convertToFeet = convertToInch;
+    LengthUnit(double convertToFeet) {
+        this.convertToFeet = convertToFeet;
     }
     public double convertToBase(double value)
     {

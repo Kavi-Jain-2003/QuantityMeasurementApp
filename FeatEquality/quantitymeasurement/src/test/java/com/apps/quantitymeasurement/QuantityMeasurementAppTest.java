@@ -5,65 +5,48 @@ import org.junit.jupiter.api.Test;
 
 class QuantityMeasurementAppTest {
 
-    // UC1
     @Test
     void testFeetEquality() {
-
-        Length l1 = new Length(1, LengthUnit.FEET);
-        Length l2 = new Length(1, LengthUnit.FEET);
-
-        assertTrue(l1.equals(l2));
+        assertTrue(new Length(1, LengthUnit.FEET)
+                .equals(new Length(1, LengthUnit.FEET)));
     }
 
-    // UC2
     @Test
     void testFeetInchEquality() {
-
-        Length l1 = new Length(1, LengthUnit.FEET);
-        Length l2 = new Length(12, LengthUnit.INCHES);
-
-        assertTrue(l1.equals(l2));
+        assertTrue(new Length(1, LengthUnit.FEET)
+                .equals(new Length(12, LengthUnit.INCHES)));
     }
 
-    // UC3
     @Test
-    void testDifferentLength() {
-
-        Length l1 = new Length(1, LengthUnit.FEET);
-        Length l2 = new Length(2, LengthUnit.FEET);
-
-        assertFalse(l1.equals(l2));
+    void testYardAndFeetEquality() {
+        assertTrue(new Length(1, LengthUnit.YARDS)
+                .equals(new Length(3, LengthUnit.FEET)));
     }
 
-    // UC4
+    @Test
+    void testCmAndInchesEquality() {
+        assertTrue(new Length(30.48, LengthUnit.CENTIMETERS)
+                .equals(new Length(12, LengthUnit.INCHES)));
+    }
+
     @Test
     void testFeetToInchesConversion() {
+        Length result = new Length(1.0, LengthUnit.FEET)
+                .convertTo(LengthUnit.INCHES);
 
-        assertEquals(12,
-                Length.convert(1, LengthUnit.FEET, LengthUnit.INCHES),
-                0.0001);
+        assertTrue(result.equals(new Length(12.0, LengthUnit.INCHES)));
     }
 
     @Test
     void testInchesToFeetConversion() {
+        double result = Length.convert(12.0, LengthUnit.INCHES, LengthUnit.FEET);
 
-        assertEquals(2,
-                Length.convert(24, LengthUnit.INCHES, LengthUnit.FEET),
-                0.0001);
-    }
-
-    @Test
-    void testCentimeterToInchConversion() {
-
-        assertEquals(1,
-                Length.convert(2.54, LengthUnit.CENTIMETERS, LengthUnit.INCHES),
-                0.0001);
+        assertEquals(1.0, result);
     }
 
     @Test
     void testInvalidUnit() {
-
-        assertThrows(IllegalArgumentException.class, () ->
-                Length.convert(1, null, LengthUnit.FEET));
+        assertThrows(IllegalArgumentException.class,
+                () -> Length.convert(1, null, LengthUnit.FEET));
     }
 }

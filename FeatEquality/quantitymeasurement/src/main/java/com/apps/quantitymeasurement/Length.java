@@ -4,18 +4,21 @@ public class Length {
 
     private final double value;
     private final LengthUnit unit;
-
+    private static final double EPSILON=1e-6;
     public Length(double value, LengthUnit unit) {
 
         if (unit == null)
             throw new NullPointerException("Unit cannot be null");
+        if(!Double.isFinite(value))
+            throw new IllegalArgumentException("Invalid numeric value");
+
 
         this.value = value;
         this.unit = unit;
     }
 
-    private double toBaseUnit() {
-        return unit.toBaseUnit(value);
+    private double toBaseValue() {
+        return unit.toFeet(value);
     }
 
     public Length convertTo(LengthUnit targetUnit) {
@@ -23,8 +26,8 @@ public class Length {
         if (targetUnit == null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
-        double baseValue = toBaseUnit();
-        double converted = targetUnit.fromBaseUnit(baseValue);
+        double baseValue = toBaseValue();
+        double converted = targetUnit.fromFeet(baseValue);
 
         return new Length(converted, targetUnit);
     }
@@ -37,9 +40,9 @@ public class Length {
         if (source == null || target == null)
             throw new IllegalArgumentException("Unit cannot be null");
 
-        double base = source.toBaseUnit(value);
+        double base = source.toFeet(value);
 
-        return target.fromBaseUnit(base);
+        return target.fromFeet(base);
     }
 
     @Override
@@ -53,16 +56,16 @@ public class Length {
 
         Length other = (Length) obj;
 
-        return Double.compare(this.toBaseUnit(), other.toBaseUnit()) == 0;
+        return Double.compare(this.toBaseValue(), other.toBaseValue()) <EPSILON;
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(toBaseUnit());
+        return Double.hashCode(toBaseValue());
     }
 
     @Override
     public String toString() {
-        return value + " " + unit;
+        return value + " ";
     }
 }

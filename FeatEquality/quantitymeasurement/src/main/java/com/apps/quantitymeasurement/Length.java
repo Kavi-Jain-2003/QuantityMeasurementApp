@@ -16,7 +16,7 @@ public class Length {
     }
 
     private double toBaseUnit() {
-        return unit.toBaseUnit(value);
+        return unit.convertToBase(value);
     }
 
     @Override

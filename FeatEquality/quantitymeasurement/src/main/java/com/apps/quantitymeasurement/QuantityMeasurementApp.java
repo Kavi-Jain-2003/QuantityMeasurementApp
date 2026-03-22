@@ -1,7 +1,5 @@
 package com.apps.quantitymeasurement;
 
-import java.util.function.BooleanSupplier;
-
 public class QuantityMeasurementApp {
 
     // Inner class for Feet

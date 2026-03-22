@@ -45,19 +45,20 @@ public class QuantityMeasurementApp {
     // 4
     static void demonstrateAdditionWithTargetUnit() {
 
-        Length l1 = new Length(1, LengthUnit.FEET);
-        Length l2 = new Length(12, LengthUnit.INCHES);
+        Length feet = new Length(1.0, LengthUnit.FEET);
+        Length inch = new Length(12.0, LengthUnit.INCHES);
 
-        Length result = l1.add(l2, LengthUnit.YARDS);
-
-        System.out.println("Addition with target unit: " + result);
+        System.out.println("Target FEET: " + Length.add(feet, inch, LengthUnit.FEET));
+        System.out.println("Target INCHES: " + Length.add(feet, inch, LengthUnit.INCHES));
+        System.out.println("Target YARDS: " + Length.add(feet, inch, LengthUnit.YARDS));
+        System.out.println("Target CM: " + Length.add(feet, inch, LengthUnit.CENTIMETERS));
     }
 
     // 5
     static void demonstrateUnitConversionMethods() {
 
-        double base = LengthUnit.INCHES.convertToBaseUnit(12);
-        double inches = LengthUnit.INCHES.convertFromBaseUnit(1);
+        double base = LengthUnit.INCHES.toFeet(12);
+        double inches = LengthUnit.INCHES.fromFeet(1);
 
         System.out.println("12 inches to feet: " + base);
         System.out.println("1 foot to inches: " + inches);

@@ -23,20 +23,7 @@ class QuantityMeasurementAppTest {
                 .equals(new Length(2, LengthUnit.FEET)));
     }
 
-    @Test
-    void testFeetToInchesConversion() {
-        assertEquals(12,
-                Length.convert(1, LengthUnit.FEET, LengthUnit.INCHES),
-                0.0001);
-    }
-
-    @Test
-    void testInchesToFeetConversion() {
-        assertEquals(2,
-                Length.convert(24, LengthUnit.INCHES, LengthUnit.FEET),
-                0.0001);
-    }
-
+   
     @Test
     void testAddition() {
 
@@ -54,22 +41,23 @@ class QuantityMeasurementAppTest {
         Length l1 = new Length(1, LengthUnit.FEET);
         Length l2 = new Length(12, LengthUnit.INCHES);
 
-        Length result = l1.add(l2, LengthUnit.YARDS);
+        Length result = Length.add(l1,l2, LengthUnit.YARDS);
 
-        assertEquals(new Length(0.6667, LengthUnit.YARDS), result);
+        assertEquals(0.667, result.getValue(), 0.01);
+        assertEquals(LengthUnit.YARDS, result.getUnit());
     }
 
     @Test
     void testConvertToBaseUnit() {
         assertEquals(1,
-                LengthUnit.INCHES.convertToBaseUnit(12),
+                LengthUnit.INCHES.toFeet(12),
                 0.0001);
     }
 
     @Test
     void testConvertFromBaseUnit() {
         assertEquals(12,
-                LengthUnit.INCHES.convertFromBaseUnit(1),
+                LengthUnit.INCHES.fromFeet(1),
                 0.0001);
     }
 

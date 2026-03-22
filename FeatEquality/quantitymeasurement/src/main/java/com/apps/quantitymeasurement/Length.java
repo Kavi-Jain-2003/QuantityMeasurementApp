@@ -2,78 +2,38 @@ package com.apps.quantitymeasurement;
 
 public class Length {
 
-    final double value;
+    private final double value;
     private final LengthUnit unit;
+    private static final double EPSILON=0.001;
 
     public Length(double value, LengthUnit unit) {
 
         if (unit == null)
             throw new NullPointerException("Unit cannot be null");
-
+        if(!Double.isFinite(value)) 
+        	throw new IllegalArgumentException("Invalid number");
         this.value = value;
         this.unit = unit;
     }
 
-    private double toBaseUnit() {
-        return unit.toBaseUnit(value);
+    private double toBaseValue() {
+        return unit.toFeet(value);
     }
-
-    public Length convertTo(LengthUnit targetUnit) {
-
-        if (targetUnit == null)
-            throw new IllegalArgumentException("Target unit cannot be null");
-
-        double baseValue = toBaseUnit();
-        double converted = targetUnit.fromBaseUnit(baseValue);
-
-        return new Length(converted, targetUnit);
-    }
-
-    public static double convert(double value, LengthUnit source, LengthUnit target) {
-
-        if (!Double.isFinite(value))
-            throw new IllegalArgumentException("Invalid numeric value");
-
-        if (source == null || target == null)
-            throw new IllegalArgumentException("Unit cannot be null");
-
-        double base = source.toBaseUnit(value);
-
-        return target.fromBaseUnit(base);
-    }
-   
     public Length add(Length other) {
-
-        if (other == null)
-            throw new IllegalArgumentException("Second operand cannot be null");
-
-        double base1 = this.toBaseUnit();
-        double base2 = other.toBaseUnit();
-
-        double sumBase = base1 + base2;
-
-        double result = this.unit.fromBaseUnit(sumBase);
-
-        return new Length(result, this.unit);
+        return Length.add(this, other, this.unit);
     }
-    public Length add(Length other, LengthUnit targetUnit) {
+  
+    public static Length add(Length q1, Length q2, LengthUnit targetUnit) throws IllegalArgumentException{
+        if(q1 == null || q2 == null) throw new IllegalArgumentException("Quantity cannot be null");
+        if(targetUnit == null) throw new IllegalArgumentException("Target unit cannot be null");
 
-        if (other == null)
-            throw new IllegalArgumentException("Second operand cannot be null");
+        double sum = q1.toBaseValue() + q2.toBaseValue();
+        double ans = targetUnit.fromFeet(sum);
+        double rounded = Math.round(ans * 1000.0) / 1000.0;
 
-        if (targetUnit == null)
-            throw new IllegalArgumentException("Target unit cannot be null");
-
-        double base1 = this.toBaseUnit();
-        double base2 = other.toBaseUnit();
-
-        double sumBase = base1 + base2;
-
-        double result = targetUnit.fromBaseUnit(sumBase);
-
-        return new Length(result, targetUnit);
+        return new Length(rounded, targetUnit);
     }
-
+    
     @Override
     public boolean equals(Object obj) {
 
@@ -85,16 +45,23 @@ public class Length {
 
         Length other = (Length) obj;
 
-        return Double.compare(this.toBaseUnit(), other.toBaseUnit()) == 0;
+        return Math.abs(this.toBaseValue()- other.toBaseValue()) <EPSILON;
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(toBaseUnit());
+        long rounded = Math.round(toBaseValue() / EPSILON);
+        return Long.hashCode(rounded);
+    }
+    @Override
+    public String toString(){
+        return String.format("%.3f %s", value, unit);
+    }
+    public double getValue() {
+        return value;
     }
 
-    @Override
-    public String toString() {
-        return value + " " + unit;
+    public LengthUnit getUnit() {
+        return unit;
     }
 }

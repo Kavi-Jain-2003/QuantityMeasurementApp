@@ -2,50 +2,36 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-	public static boolean demonstrateLengthEquality(Length l1, Length l2) {
-        return l1.equals(l2);
-    }
-
-    public static boolean demonstrateLengthComparison(double v1, LengthUnit u1,
-                                                      double v2, LengthUnit u2) {
-
-        Length l1 = new Length(v1, u1);
-        Length l2 = new Length(v2, u2);
-
-        return l1.equals(l2);
-    }
-
-    public static double demonstrateLengthConversion(double value,
-                                                     LengthUnit from,
-                                                     LengthUnit to) {
-
-        return Length.convert(value, from, to);
-    }
-
-    public static Length demonstrateLengthConversion(Length length,
-                                                     LengthUnit to) {
-
-        return length.convertTo(to);
-    }
-
-    // ✅ UC6 ADD DEMONSTRATE METHOD
-    public static Length demonstrateLengthAddition(Length l1, Length l2) {
-
-        return l1.add(l2);
-    }
-
     public static void main(String[] args) {
 
-        Length result1 = demonstrateLengthAddition(
-                new Length(1, LengthUnit.FEET),
-                new Length(12, LengthUnit.INCHES));
+        Length foot = new Length(1.0, LengthUnit.FEET);
+        Length inches = new Length(12.0, LengthUnit.INCHES);
+        Length yard = new Length(1.0, LengthUnit.YARDS);
+        Length cm = new Length(30.48, LengthUnit.CENTIMETERS);
 
-        System.out.println(result1);
+        System.out.println("1 feet = 12 inches " + foot.equals(inches) +
+                "\n1 yard = 3 feet " + yard.equals(new Length(3.0, LengthUnit.FEET)) +
+                "\n30.48 cm = 1 feet " + cm.equals(foot));
 
-        Length result2 = demonstrateLengthAddition(
-                new Length(12, LengthUnit.INCHES),
-                new Length(1, LengthUnit.FEET));
+        Length feet = new Length(1.0, LengthUnit.FEET);
+        Length inch = new Length(2.0, LengthUnit.INCHES);
 
-        System.out.println(result2);
+        Length result1 = feet.add(inch);
+        System.out.println("1 feet + 2 inches = " + result1);
+
+        Length result2 = inch.add(feet);
+        System.out.println("2 inches + 1 feet = " + result2);
+
+        Length yd = new Length(1.0, LengthUnit.YARDS);
+        Length feetTwo = new Length(2.0, LengthUnit.FEET);
+
+        Length result3 = yd.add(feetTwo);
+        System.out.println("1 yard + 2 feet = " + result3);
+
+        Length zero = new Length(0.0, LengthUnit.FEET);
+        Length negative = new Length(-2.0, LengthUnit.FEET);
+
+        System.out.println("1 feet + 0 feet = " + feet.add(zero));
+        System.out.println("5 feet + (-2 feet) = " + new Length(5.0, LengthUnit.FEET).add(negative));
     }
 }

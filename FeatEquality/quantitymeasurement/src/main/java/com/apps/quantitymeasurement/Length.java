@@ -14,45 +14,21 @@ public class Length {
         this.unit = unit;
     }
 
-    private double toBaseUnit() {
-        return unit.toBaseUnit(value);
+    private double toBaseValue() {
+        return unit.toFeet(value);
     }
 
-    public Length convertTo(LengthUnit targetUnit) {
-
-        if (targetUnit == null)
-            throw new IllegalArgumentException("Target unit cannot be null");
-
-        double baseValue = toBaseUnit();
-        double converted = targetUnit.fromBaseUnit(baseValue);
-
-        return new Length(converted, targetUnit);
-    }
-
-    public static double convert(double value, LengthUnit source, LengthUnit target) {
-
-        if (!Double.isFinite(value))
-            throw new IllegalArgumentException("Invalid numeric value");
-
-        if (source == null || target == null)
-            throw new IllegalArgumentException("Unit cannot be null");
-
-        double base = source.toBaseUnit(value);
-
-        return target.fromBaseUnit(base);
-    }
-   
     public Length add(Length other) {
 
         if (other == null)
             throw new IllegalArgumentException("Second operand cannot be null");
 
-        double base1 = this.toBaseUnit();
-        double base2 = other.toBaseUnit();
+        double base1 = this.toBaseValue();
+        double base2 = other.toBaseValue();
 
         double sumBase = base1 + base2;
 
-        double result = this.unit.fromBaseUnit(sumBase);
+        double result = this.unit.fromFeet(sumBase);
 
         return new Length(result, this.unit);
     }
@@ -67,12 +43,12 @@ public class Length {
 
         Length other = (Length) obj;
 
-        return Double.compare(this.toBaseUnit(), other.toBaseUnit()) == 0;
+        return Double.compare(this.toBaseValue(), other.toBaseValue()) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(toBaseUnit());
+        return Double.hashCode(toBaseValue());
     }
 
     @Override

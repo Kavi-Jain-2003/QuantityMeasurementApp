@@ -3,13 +3,13 @@ public enum LengthUnit {
 	FEET(1.0),
     INCHES(1.0 / 12.0);
 
-    private final double conversionFactor;
+    private final double convertToFeet;
 
-    LengthUnit(double conversionFactor) {
-        this.conversionFactor = conversionFactor;
+    LengthUnit(double convertToInch) {
+        this.convertToFeet = convertToInch;
     }
-
-    public double getConversionFactor() {
-        return conversionFactor;
+    public double convertToBase(double value)
+    {
+    	return value*convertToFeet;
     }
 }

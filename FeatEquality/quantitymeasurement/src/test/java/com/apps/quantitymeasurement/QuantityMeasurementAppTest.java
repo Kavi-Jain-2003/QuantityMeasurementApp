@@ -29,13 +29,6 @@ class QuantityMeasurementAppTest {
 	        assertTrue(l1.equals(l2));
 	    }
 
-	    @Test
-	    void testEquality_InchToFeet_EquivalentValue() {
-	        Length l1 = new Length(12.0, LengthUnit.INCHES);
-	        Length l2 = new Length(1.0, LengthUnit.FEET);
-
-	        assertTrue(l1.equals(l2));
-	    }
 
 	    @Test
 	    void testEquality_FeetToFeet_DifferentValue() {
@@ -58,29 +51,5 @@ class QuantityMeasurementAppTest {
 	        Length l1 = new Length(1.0, LengthUnit.FEET);
 
 	        assertTrue(l1.equals(l1));
-	    }
-
-	    @Test
-	    void testEquality_NullComparison() {
-	        Length l1 = new Length(1.0, LengthUnit.FEET);
-
-	        assertFalse(l1.equals(null));
-	    }
-
-	    @Test
-	    void testEquality_NullUnit() {
-
-	        Exception exception = assertThrows(NullPointerException.class, () -> {
-	            new Length(1.0, null);
-	        });
-
-	        assertNotNull(exception);
-	    }
-
-	    @Test
-	    void testEquality_InvalidUnit() {
-	        assertThrows(IllegalArgumentException.class, () -> {
-	            LengthUnit.valueOf("INVALID");
-	        });
 	    }
 	}

@@ -2,46 +2,33 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-	 // Generic method for Length equality
-    public static boolean demonstrateLengthEquality(Length length1, Length length2) {
-        return length1.equals(length2);
+    public static boolean demonstrateLengthEquality(Length l1, Length l2) {
+        return l1.equals(l2);
     }
 
-    // Demonstrate Feet equality
-    public static void demonstrateFeetEquality() {
+    // Case 1: 1 ft = 12 in
+    public static void demonstrateFeetInchesComparison1() {
 
-        Length length1 = new Length(1.0, LengthUnit.FEET);
-        Length length2 = new Length(1.0, LengthUnit.FEET);
+        Length feet1 = new Length(1.0, LengthUnit.FEET);
+        Length inch1 = new Length(12.0, LengthUnit.INCHES);
 
-        System.out.println("Feet equality: " +
-                demonstrateLengthEquality(length1, length2));
+        System.out.println("1 ft == 12 in : " +
+                demonstrateLengthEquality(feet1, inch1));
     }
 
-    // Demonstrate Inches equality
-    public static void demonstrateInchesEquality() {
+    // Case 2: 2 ft = 24 in
+    public static void demonstrateFeetInchesComparison2() {
 
-        Length length1 = new Length(1.0, LengthUnit.INCHES);
-        Length length2 = new Length(1.0, LengthUnit.INCHES);
+        Length feet2 = new Length(2.0, LengthUnit.FEET);
+        Length inch2 = new Length(24.0, LengthUnit.INCHES);
 
-        System.out.println("Inches equality: " +
-                demonstrateLengthEquality(length1, length2));
+        System.out.println("2 ft == 24 in : " +
+                demonstrateLengthEquality(feet2, inch2));
     }
 
-    // Demonstrate Feet ↔ Inches comparison
-    public static void demonstrateFeetInchesComparison() {
-
-        Length length1 = new Length(1.0, LengthUnit.FEET);
-        Length length2 = new Length(12.0, LengthUnit.INCHES);
-
-        System.out.println("Feet to Inches comparison: " +
-                demonstrateLengthEquality(length1, length2));
-    }
-
-    // Main method
     public static void main(String[] args) {
 
-        demonstrateFeetEquality();
-        demonstrateInchesEquality();
-        demonstrateFeetInchesComparison();
+        demonstrateFeetInchesComparison1();
+        demonstrateFeetInchesComparison2();
     }
 }

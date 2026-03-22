@@ -29,53 +29,36 @@ public class Length {
         return unit;
     }
 
-    // UC4 conversion (kept for backward compatibility)
-    public static double convert(double value, LengthUnit from, LengthUnit to) {
-
-        if (from == null || to == null)
-            throw new IllegalArgumentException("Unit cannot be null");
-
-        double base = from.convertToBaseUnit(value);
-
-        return to.convertFromBaseUnit(base);
+    private double toBaseValue(){
+        return unit.toFeet(value);
     }
 
     // UC8 convertTo method
     public Length convertTo(LengthUnit targetUnit) {
 
-        double base = unit.convertToBaseUnit(value);
+        double base = this.toBaseValue();
+        double converted = targetUnit.fromFeet(base);
 
-        double converted = targetUnit.convertFromBaseUnit(base);
+        double rounded = Math.round(converted * 1000.0) / 1000.0;
 
-        return new Length(converted, targetUnit);
+        return new Length(rounded, targetUnit);
     }
 
     // UC6 Addition
-    public Length add(Length other) {
-
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        double resultBase = base1 + base2;
-
-        double resultValue = unit.convertFromBaseUnit(resultBase);
-
-        return new Length(resultValue, unit);
-    }
+    public Length add(Length q){
+        return add(this, q, this.unit);
+     }
 
     // UC7 Addition with target unit
-    public Length add(Length other, LengthUnit targetUnit) {
+    public static Length add(Length q1, Length q2, LengthUnit targetUnit) throws IllegalArgumentException{
+        if(q1 == null || q2 == null) throw new IllegalArgumentException(" cannot be null");
+        if(targetUnit == null) throw new IllegalArgumentException("Target unit cannot be null");
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
+        double sum = q1.toBaseValue() + q2.toBaseValue();
+        double ans = targetUnit.fromFeet(sum);
 
-        double resultBase = base1 + base2;
-
-        double resultValue = targetUnit.convertFromBaseUnit(resultBase);
-
-        return new Length(resultValue, targetUnit);
+        return new Length(Math.round(ans * 1000.0) / 1000.0, targetUnit);
     }
-
     @Override
     public boolean equals(Object obj) {
 
@@ -87,18 +70,12 @@ public class Length {
 
         Length other = (Length) obj;
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        return Math.abs(base1 - base2) < EPSILON;
+        return Math.abs(this.toBaseValue() - other.toBaseValue()) < EPSILON;
     }
 
     @Override
-    public int hashCode() {
-
-        double base = unit.convertToBaseUnit(value);
-
-        return Objects.hash(Math.round(base / EPSILON));
+    public int hashCode(){
+        return Objects.hash(Math.round(toBaseValue() / EPSILON));
     }
 
     @Override

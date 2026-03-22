@@ -35,7 +35,7 @@ public class QuantityMeasurementApp {
 
         Length l = new Length(1, LengthUnit.FEET);
 
-        System.out.println(l.convertTo(LengthUnit.INCHES));
+        System.out.println("1 FEET in INCHES: " + l.convertTo(LengthUnit.INCHES));
     }
 
     static void lengthAdditionDemo() {
@@ -43,7 +43,7 @@ public class QuantityMeasurementApp {
         Length l1 = new Length(1, LengthUnit.FEET);
         Length l2 = new Length(12, LengthUnit.INCHES);
 
-        System.out.println(l1.add(l2));
+        System.out.println("Addition (default): " + l1.add(l2));
     }
 
     static void lengthAdditionTargetUnitDemo() {
@@ -51,16 +51,13 @@ public class QuantityMeasurementApp {
         Length l1 = new Length(1, LengthUnit.FEET);
         Length l2 = new Length(12, LengthUnit.INCHES);
 
-        System.out.println(l1.add(l2, LengthUnit.YARDS));
+        System.out.println("Addition in YARDS: " + Length.add(l1, l2, LengthUnit.YARDS));
     }
 
     static void lengthUnitConversionMethodsDemo() {
 
-        System.out.println(
-                LengthUnit.INCHES.convertToBaseUnit(12));
-
-        System.out.println(
-                LengthUnit.INCHES.convertFromBaseUnit(1));
+        System.out.println("12 inches to feet: " + LengthUnit.INCHES.toFeet(12));
+        System.out.println("1 foot to inches: " + LengthUnit.INCHES.fromFeet(1));
     }
 
     static void lengthCrossUnitEqualityDemo() {
@@ -68,7 +65,7 @@ public class QuantityMeasurementApp {
         Length l1 = new Length(36, LengthUnit.INCHES);
         Length l2 = new Length(1, LengthUnit.YARDS);
 
-        System.out.println(l1.equals(l2));
+        System.out.println("36 inches == 1 yard: " + l1.equals(l2));
     }
 
     // ---------- WEIGHT METHODS ----------
@@ -85,7 +82,7 @@ public class QuantityMeasurementApp {
 
         Weight w = new Weight(1, WeightUnit.KILOGRAM);
 
-        System.out.println(w.convertTo(WeightUnit.GRAM));
+        System.out.println("1 KG in GRAM: " + w.convertTo(WeightUnit.GRAM));
     }
 
     static void weightAdditionDemo() {
@@ -93,7 +90,7 @@ public class QuantityMeasurementApp {
         Weight w1 = new Weight(1, WeightUnit.KILOGRAM);
         Weight w2 = new Weight(1000, WeightUnit.GRAM);
 
-        System.out.println(w1.add(w2));
+        System.out.println("Addition (default): " + w1.add(w2));
     }
 
     static void weightAdditionTargetUnitDemo() {
@@ -101,7 +98,7 @@ public class QuantityMeasurementApp {
         Weight w1 = new Weight(1, WeightUnit.KILOGRAM);
         Weight w2 = new Weight(1000, WeightUnit.GRAM);
 
-        System.out.println(w1.add(w2, WeightUnit.GRAM));
+        System.out.println("Addition in GRAM: " + Weight.add(w1, w2, WeightUnit.GRAM));
     }
 
     static void weightCrossUnitEqualityDemo() {
@@ -109,15 +106,12 @@ public class QuantityMeasurementApp {
         Weight w1 = new Weight(1, WeightUnit.POUND);
         Weight w2 = new Weight(453.592, WeightUnit.GRAM);
 
-        System.out.println(w1.equals(w2));
+        System.out.println("1 pound == 453.592g: " + w1.equals(w2));
     }
 
     static void weightUnitConversionMethodsDemo() {
 
-        System.out.println(
-                WeightUnit.POUND.convertToBaseUnit(1));
-
-        System.out.println(
-                WeightUnit.POUND.convertFromBaseUnit(1));
+        System.out.println("1 pound to kg(base): " + WeightUnit.POUND.convertToKG(1));
+        System.out.println("1 kg(base) to pound: " + WeightUnit.POUND.convertFromKG(1));
     }
 }

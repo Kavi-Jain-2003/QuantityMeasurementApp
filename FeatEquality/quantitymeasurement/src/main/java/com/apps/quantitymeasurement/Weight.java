@@ -7,7 +7,7 @@ public class Weight {
     private final double value;
     private final WeightUnit unit;
 
-    private static final double EPSILON = 0.0001;
+    private static final double EPSILON = 0.000001;
 
     public Weight(double value, WeightUnit unit) {
 
@@ -28,38 +28,29 @@ public class Weight {
     public WeightUnit getUnit() {
         return unit;
     }
-
+    public double toBaseValue(){ return unit.convertToKG(value); }
     public Weight convertTo(WeightUnit targetUnit) {
 
-        double base = unit.convertToBaseUnit(value);
+        double base = unit.convertToKG(value);
 
-        double converted = targetUnit.convertFromBaseUnit(base);
+        double converted = targetUnit.convertFromKG(base);
 
         return new Weight(converted, targetUnit);
     }
 
-    public Weight add(Weight other) {
+    	 public Weight add(Weight other){
+    	        return add(this, other, this.unit);
+    	    }
+    	    public static Weight add(Weight w1, Weight w2, WeightUnit targetUnit){
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
+    	if(w1 == null || w2 == null) throw new IllegalArgumentException("Quantity cannot be null!");
+        if(targetUnit == null) throw new IllegalArgumentException("Target Unit cannot be null!");
 
-        double resultBase = base1 + base2;
+        double sum = w1.toBaseValue() + w2.toBaseValue(); // sum in KG
 
-        double resultValue = unit.convertFromBaseUnit(resultBase);
+        double converted = targetUnit.convertToKG(sum);
 
-        return new Weight(resultValue, unit);
-    }
-
-    public Weight add(Weight other, WeightUnit targetUnit) {
-
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        double resultBase = base1 + base2;
-
-        double resultValue = targetUnit.convertFromBaseUnit(resultBase);
-
-        return new Weight(resultValue, targetUnit);
+        return new Weight(Math.round(converted * 1000.0) / 1000.0, targetUnit);
     }
 
     @Override
@@ -73,16 +64,13 @@ public class Weight {
 
         Weight other = (Weight) obj;
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        return Math.abs(base1 - base2) < EPSILON;
+        return Math.abs(this.toBaseValue() - other.toBaseValue()) < EPSILON;
     }
 
     @Override
     public int hashCode() {
 
-        double base = unit.convertToBaseUnit(value);
+        double base = unit.convertToKG(value);
 
         return Objects.hash(Math.round(base / EPSILON));
     }

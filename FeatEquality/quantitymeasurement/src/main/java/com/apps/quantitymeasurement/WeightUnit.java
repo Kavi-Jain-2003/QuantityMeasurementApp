@@ -6,23 +6,23 @@ public enum WeightUnit {
     GRAM(0.001),
     POUND(0.453592);
 
-    private final double conversionFactor;
+    private final double toKG;
 
-    WeightUnit(double conversionFactor) {
-        this.conversionFactor = conversionFactor;
+    WeightUnit(double toKG) {
+        this.toKG = toKG;
     }
 
-    public double getConversionFactor() {
-        return conversionFactor;
+    public double getCoversionFactor() {
+        return toKG;
     }
 
     // Convert to base unit (kilogram)
-    public double convertToBaseUnit(double value) {
-        return value * conversionFactor;
+    public double convertToKG(double value) {
+        return value * toKG;
     }
 
     // Convert from kilogram to this unit
-    public double convertFromBaseUnit(double baseValue) {
-        return baseValue / conversionFactor;
+    public double convertFromKG(double baseValue) {
+        return baseValue / toKG;
     }
 }

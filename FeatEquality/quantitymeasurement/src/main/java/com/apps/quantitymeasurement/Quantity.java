@@ -27,19 +27,24 @@ public class Quantity<U extends IMeasurable> {
     public U getUnit() {
         return unit;
     }
+    private double toBaseValue(){
+        double base = unit.convertToBase(value);
+        return Math.round(base * 100000.0) / 100000.0;
+    }
+
 
     public Quantity<U> convertTo(U targetUnit) {
 
         if (targetUnit == null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
-        double baseValue = unit.convertToBaseUnit(value);
+        double base = this.toBaseValue();
 
-        double converted = targetUnit.convertFromBaseUnit(baseValue);
+        double converted = targetUnit.convertFromBase(base);
 
-        converted = Math.round(converted * 100.0) / 100.0;
+        double rounded = Math.round(converted * 100.0) / 100.0;
 
-        return new Quantity<>(converted, targetUnit);
+        return new Quantity<>(rounded, targetUnit);
     }
 
     public Quantity<U> add(Quantity<U> other) {
@@ -51,41 +56,32 @@ public class Quantity<U extends IMeasurable> {
         if (other == null)
             throw new IllegalArgumentException("Other quantity cannot be null");
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
+        double base1 = this.toBaseValue();
+        double base2 = other.toBaseValue();
 
         double sumBase = base1 + base2;
 
-        double result = targetUnit.convertFromBaseUnit(sumBase);
+        double result = targetUnit.convertFromBase(sumBase);
 
-        result = Math.round(result * 100.0) / 100.0;
+        double rounded = Math.round(result * 100.0) / 100.0;
 
-        return new Quantity<>(result, targetUnit);
+        return new Quantity<>(rounded, targetUnit);
     }
 
     @Override
-    public boolean equals(Object obj) {
-
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
 
         Quantity<?> other = (Quantity<?>) obj;
+        if(!this.unit.getClass().equals(other.unit.getClass())) return false;
 
-        if (this.unit.getClass() != other.unit.getClass())
-            return false;
-
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        return Math.abs(base1 - base2) < 0.0001;
+        return Double.compare(this.toBaseValue(), other.toBaseValue()) == 0;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(unit.getClass(), unit.convertToBaseUnit(value));
+    public int hashCode(){
+        return Objects.hash(toBaseValue(), unit.getClass());
     }
 
     @Override

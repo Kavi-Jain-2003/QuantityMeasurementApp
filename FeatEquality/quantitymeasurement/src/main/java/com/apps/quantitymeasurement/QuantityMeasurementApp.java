@@ -18,7 +18,7 @@ public class QuantityMeasurementApp {
         System.out.println(quantity + " -> " + quantity.convertTo(targetUnit));
     }
 
-    // 3️ Addition (implicit unit)
+    // 3️ Addition (same unit result)
     public static <U extends IMeasurable> void demonstrateAddition(
             Quantity<U> q1,
             Quantity<U> q2) {
@@ -26,7 +26,7 @@ public class QuantityMeasurementApp {
         System.out.println(q1 + " + " + q2 + " = " + q1.add(q2));
     }
 
-    // 4️ Addition (explicit unit)
+    // 4️ Addition (target unit result)
     public static <U extends IMeasurable> void demonstrateAdditionWithTarget(
             Quantity<U> q1,
             Quantity<U> q2,
@@ -45,6 +45,8 @@ public class QuantityMeasurementApp {
         demonstrateConversion(l1, LengthUnit.INCHES);
         demonstrateAddition(l1, l2);
         demonstrateAdditionWithTarget(l1, l2, LengthUnit.FEET);
+
+        System.out.println();
 
         // WEIGHT
         Quantity<WeightUnit> w1 = new Quantity<>(1, WeightUnit.KILOGRAM);

@@ -4,65 +4,96 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        // -------- LENGTH ADDITION --------
-        Quantity<LengthUnit> length1 =
-                new Quantity<>(1.0, LengthUnit.FEET);
+        demonstrateLength();
+        demonstrateWeight();
+        demonstrateVolume();
+    }
 
-        Quantity<LengthUnit> length2 =
-                new Quantity<>(12.0, LengthUnit.INCHES);
+    //  LENGTH 
+    public static void demonstrateLength() {
 
-        System.out.println("Addition:");
-        System.out.println(length1.add(length2));
+        System.out.println("----- LENGTH -----");
 
+        Quantity<LengthUnit> f = new Quantity<>(1, LengthUnit.FEET);
+        Quantity<LengthUnit> i = new Quantity<>(12, LengthUnit.INCH);
+        Quantity<LengthUnit> y = new Quantity<>(1, LengthUnit.YARDS);
+        Quantity<LengthUnit> cm = new Quantity<>(30.48, LengthUnit.CENTIMETER);
 
-        // -------- WEIGHT ADDITION --------
-        Quantity<WeightUnit> weight1 =
-                new Quantity<>(10.0, WeightUnit.KILOGRAM);
+        // Equality
+        System.out.println("1 ft == 12 inch: " + f.equals(i));
+        System.out.println("1 yard == 3 ft: " + y.equals(new Quantity<>(3, LengthUnit.FEET)));
+        System.out.println("30.48 cm == 1 ft: " + cm.equals(f));
 
-        Quantity<WeightUnit> weight2 =
-                new Quantity<>(5000.0, WeightUnit.GRAM);
+        // Conversion
+        System.out.println("1 ft in inch: " + f.convertTo(LengthUnit.INCH));
+        System.out.println("1 yard in feet: " + y.convertTo(LengthUnit.FEET));
+        System.out.println("1 ft in cm: " + f.convertTo(LengthUnit.CENTIMETER));
 
-        System.out.println(weight1.add(weight2, WeightUnit.GRAM));
+        // Addition
+        System.out.println("1 ft + 12 inch: " + f.add(i));
+        System.out.println("1 ft + 12 inch (inch): " + f.add(i, LengthUnit.INCH));
 
+        // Subtraction
+        System.out.println("1 ft - 6 inch: " + f.subtract(new Quantity<>(6, LengthUnit.INCH)));
+        System.out.println("1 ft - 6 inch (inch): " + f.subtract(new Quantity<>(6, LengthUnit.INCH), LengthUnit.INCH));
 
-        // -------- SUBTRACTION --------
-        Quantity<LengthUnit> length3 =
-                new Quantity<>(10.0, LengthUnit.FEET);
+        // Division
+        System.out.println("1 yard / 1 ft: " + y.divide(f));
+    }
 
-        Quantity<LengthUnit> length4 =
-                new Quantity<>(6.0, LengthUnit.INCHES);
+    // WEIGHT
+    public static void demonstrateWeight() {
 
-        System.out.println("Subtraction:");
-        System.out.println(length3.subtract(length4));
+        System.out.println("\n----- WEIGHT -----");
 
+        Quantity<WeightUnit> kg = new Quantity<>(1, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> g = new Quantity<>(1000, WeightUnit.GRAM);
+        Quantity<WeightUnit> lb = new Quantity<>(2.20462, WeightUnit.POUND);
 
-        // -------- VOLUME SUBTRACTION --------
-        Quantity<VolumeUnit> volume1 =
-                new Quantity<>(5.0, VolumeUnit.LITRE);
+        // Equality
+        System.out.println("1 kg == 1000 g: " + kg.equals(g));
+        System.out.println("1 kg == 2.20462 pound: " + kg.equals(lb));
 
-        Quantity<VolumeUnit> volume2 =
-                new Quantity<>(2.0, VolumeUnit.LITRE);
+        // Conversion
+        System.out.println("1 kg in gram: " + kg.convertTo(WeightUnit.GRAM));
+        System.out.println("1 kg in pound: " + kg.convertTo(WeightUnit.POUND));
 
-        System.out.println(volume1.subtract(volume2, VolumeUnit.MILLILITRE));
+        // Addition
+        System.out.println("1 kg + 1000 g: " + kg.add(g));
+        System.out.println("1 kg + 1000 g (gram): " + kg.add(g, WeightUnit.GRAM));
 
+        // Subtraction
+        System.out.println("1 kg - 500 g: " + kg.subtract(new Quantity<>(500, WeightUnit.GRAM)));
 
-        // -------- DIVISION --------
-        Quantity<LengthUnit> d1 =
-                new Quantity<>(10.0, LengthUnit.FEET);
+        // Division
+        System.out.println("1 kg / 1000 g: " + kg.divide(g));
+    }
 
-        Quantity<LengthUnit> d2 =
-                new Quantity<>(2.0, LengthUnit.FEET);
+    // ---------------- VOLUME ----------------
+    public static void demonstrateVolume() {
 
-        System.out.println("Division:");
-        System.out.println(d1.divide(d2));
+        System.out.println("\n----- VOLUME -----");
 
+        Quantity<VolumeUnit> l = new Quantity<>(1, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> ml = new Quantity<>(1000, VolumeUnit.MILLILITRE);
+        Quantity<VolumeUnit> gallon = new Quantity<>(0.264172, VolumeUnit.GALLON);
 
-        Quantity<LengthUnit> d3 =
-                new Quantity<>(24.0, LengthUnit.INCHES);
+        // Equality
+        System.out.println("1 litre == 1000 ml: " + l.equals(ml));
+        System.out.println("1 litre == 0.264 gallon: " + l.equals(gallon));
 
-        Quantity<LengthUnit> d4 =
-                new Quantity<>(2.0, LengthUnit.FEET);
+        // Conversion
+        System.out.println("1 litre in ml: " + l.convertTo(VolumeUnit.MILLILITRE));
+        System.out.println("1 litre in gallon: " + l.convertTo(VolumeUnit.GALLON));
 
-        System.out.println(d3.divide(d4));
+        // Addition
+        System.out.println("1 litre + 1000 ml: " + l.add(ml));
+        System.out.println("1 litre + 1000 ml (gallon): " + l.add(ml, VolumeUnit.GALLON));
+
+        // Subtraction
+        System.out.println("1 litre - 500 ml: " + l.subtract(new Quantity<>(500, VolumeUnit.MILLILITRE)));
+
+        // Division
+        System.out.println("1 litre / 1000 ml: " + l.divide(ml));
     }
 }

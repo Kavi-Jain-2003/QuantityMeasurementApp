@@ -4,32 +4,30 @@ public class QuantityMeasurementApp {
 
 	public static void main(String[] args) {
 
-		// -------- Temperature Equality --------
+		demonstrateTemperatureEquality();
+		demonstrateTemperatureConversion();
+	}
+
+	// -------- Temperature Equality --------
+	public static void demonstrateTemperatureEquality() {
+
+		System.out.println("----- Temperature Equality -----");
+
 		Quantity<TemperatureUnit> t1 = new Quantity<>(0, TemperatureUnit.CELSIUS);
 
 		Quantity<TemperatureUnit> t2 = new Quantity<>(32, TemperatureUnit.FAHRENHEIT);
 
-		System.out.println("Temperature Equality:");
-		System.out.println(t1.equals(t2));
+		System.out.println("0°C == 32°F : " + t1.equals(t2));
+	}
 
-		// -------- Temperature Conversion --------
+	// -------- Temperature Conversion --------
+	public static void demonstrateTemperatureConversion() {
+
+		System.out.println("\n----- Temperature Conversion -----");
+
 		Quantity<TemperatureUnit> temp = new Quantity<>(100, TemperatureUnit.CELSIUS);
 
-		System.out.println("Convert to Fahrenheit:");
-		System.out.println(temp.convertTo(TemperatureUnit.FAHRENHEIT));
-
-		// -------- Unsupported Operation --------
-		try {
-
-			Quantity<TemperatureUnit> a = new Quantity<>(100, TemperatureUnit.CELSIUS);
-
-			Quantity<TemperatureUnit> b = new Quantity<>(50, TemperatureUnit.CELSIUS);
-
-			System.out.println(a.add(b));
-
-		} catch (UnsupportedOperationException e) {
-
-			System.out.println(e.getMessage());
-		}
+		System.out.println("100°C in Fahrenheit: " + temp.convertTo(TemperatureUnit.FAHRENHEIT));
 	}
+
 }

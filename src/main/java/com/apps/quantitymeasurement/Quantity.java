@@ -27,19 +27,22 @@ public class Quantity<U extends IMeasurable> {
     public U getUnit() {
         return unit;
     }
-
+    private double toBaseValue(){
+        double base = unit.convertToBase(value);
+        return Math.round(base * 100000.0) / 100000.0;
+    }
     public Quantity<U> convertTo(U targetUnit) {
 
         if (targetUnit == null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
-        double baseValue = unit.convertToBaseUnit(value);
+        double baseValue =this.toBaseValue();
 
-        double converted = targetUnit.convertFromBaseUnit(baseValue);
+        double converted = targetUnit.convertFromBase(baseValue);
 
-        converted = Math.round(converted * 100.0) / 100.0;
+        double rounded = Math.round(converted * 100.0) / 100.0;
 
-        return new Quantity<>(converted, targetUnit);
+        return new Quantity<>(rounded, targetUnit);
     }
 
     public Quantity<U> add(Quantity<U> other) {
@@ -51,16 +54,16 @@ public class Quantity<U extends IMeasurable> {
         if (other == null)
             throw new IllegalArgumentException("Other quantity cannot be null");
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
+        double base1 = this.toBaseValue();
+        double base2 = other.toBaseValue();
 
         double sumBase = base1 + base2;
 
-        double result = targetUnit.convertFromBaseUnit(sumBase);
+        double result = targetUnit.convertFromBase(sumBase);
 
-        result = Math.round(result * 100.0) / 100.0;
+        double rounded = Math.round(result * 100.0) / 100.0;
 
-        return new Quantity<>(result, targetUnit);
+        return new Quantity<>(rounded, targetUnit);
     }
 
     @Override
@@ -77,15 +80,15 @@ public class Quantity<U extends IMeasurable> {
         if (this.unit.getClass() != other.unit.getClass())
             return false;
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
+        double base1 = this.toBaseValue();
+        double base2 = other.toBaseValue();
 
         return Math.abs(base1 - base2) < 0.0001;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(unit.getClass(), unit.convertToBaseUnit(value));
+        return Objects.hash(toBaseValue(),unit.getClass());
     }
 
     @Override

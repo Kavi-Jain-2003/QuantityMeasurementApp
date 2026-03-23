@@ -9,7 +9,7 @@ public class QuantityMeasurementApp {
         demonstrateVolumeOperations();
     }
 
-    // ---------------- LENGTH DEMO ----------------
+    //  LENGTH DEMO 
 
     public static void demonstrateLengthOperations() {
 
@@ -37,7 +37,7 @@ public class QuantityMeasurementApp {
                 + result.getValue() + " " + result.getUnit());
     }
 
-    // ---------------- WEIGHT DEMO ----------------
+    //  WEIGHT DEMO
 
     public static void demonstrateWeightOperations() {
 
@@ -65,7 +65,7 @@ public class QuantityMeasurementApp {
                 + result.getValue() + " " + result.getUnit());
     }
 
-    // ---------------- VOLUME DEMO ----------------
+    // VOLUME DEMO 
 
     public static void demonstrateVolumeOperations() {
 
@@ -75,21 +75,36 @@ public class QuantityMeasurementApp {
                 new Quantity<>(1.0, VolumeUnit.LITRE);
 
         Quantity<VolumeUnit> volume2 =
+                new Quantity<>(2.0, VolumeUnit.MILLILITRE);
+
+        System.out.println("Are 1 Litre and 2 ml equal? "
+                + volume1.equals(volume2));
+
+        Quantity<VolumeUnit> volume3 =
+                new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> volume4 =
                 new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
 
         System.out.println("Are 1 Litre and 1000 ml equal? "
-                + volume1.equals(volume2));
+                + volume3.equals(volume4));
 
         Quantity<VolumeUnit> converted =
-                volume1.convertTo(VolumeUnit.MILLILITRE);
+                volume1.convertTo(VolumeUnit.GALLON);
 
-        System.out.println("1 Litre in Millilitres: "
+        System.out.println("1 Litre in Gallons: "
                 + converted.getValue());
 
-        Quantity<VolumeUnit> result =
-                volume1.add(volume2);
+        Quantity<VolumeUnit> result1 =
+                volume2.add(volume3);
 
-        System.out.println("1 Litre + 1000 ml = "
-                + result.getValue() + " " + result.getUnit());
+        System.out.println("2 ml + 1 Litre = "
+                + result1.getValue() + " " + result1.getUnit());
+
+        Quantity<VolumeUnit> result2 =
+                volume3.add(volume4, VolumeUnit.GALLON);
+
+        System.out.println("1 Litre + 1000 ml in Gallon = "
+                + result2.getValue() + " " + result2.getUnit());
     }
 }

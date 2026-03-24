@@ -2,9 +2,8 @@ package com.apps.quantitymeasurement;
 
 import org.junit.jupiter.api.Test;
 
-import com.apps.quantitymeasurement.dto.QuantityDTO;
-import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
-import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
+import com.apps.quantitymeasurement.model.*;
+
 import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
 import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
 import com.apps.quantitymeasurement.unit.LengthUnit;
@@ -38,7 +37,7 @@ public class QuantityMeasurementAppTest {
     @Test
     void testLengthAddition() {
         Quantity<LengthUnit> q1 = new Quantity<>(1, LengthUnit.FEET);
-        Quantity<LengthUnit> q2 = new Quantity<>(12, LengthUnit.INCHES);
+        Quantity<LengthUnit> q2 = new Quantity<>(12, LengthUnit.INCH);
 
         Quantity<LengthUnit> result = q1.add(q2);
 

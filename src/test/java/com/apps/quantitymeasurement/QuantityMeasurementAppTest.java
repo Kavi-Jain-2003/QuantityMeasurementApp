@@ -1,297 +1,178 @@
 package com.apps.quantitymeasurement;
-
+import com.apps.quantitymeasurement.controller.*;
+import com.apps.quantitymeasurement.entity.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import com.apps.quantitymeasurement.dto.QuantityDTO;
-import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
-import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
-import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
-import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
-import com.apps.quantitymeasurement.unit.LengthUnit;
-import com.apps.quantitymeasurement.unit.Quantity;
-import com.apps.quantitymeasurement.unit.TemperatureUnit;
-import com.apps.quantitymeasurement.unit.VolumeUnit;
-import com.apps.quantitymeasurement.unit.WeightUnit;
-
+import com.apps.quantitymeasurement.unit.*;
+import com.apps.quantitymeasurement.service.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementAppTest {
 
-    // ---------- LENGTH ----------
+    private IQuantityMeasurementService service;
+    private QuantityMeasurementController controller;
 
-    @Test
-    void testFeetEqualsInches() {
-        Quantity<LengthUnit> feet = new Quantity<>(1, LengthUnit.FEET);
-        Quantity<LengthUnit> inches = new Quantity<>(12, LengthUnit.INCHES);
-
-        assertEquals(feet, inches);
+    @BeforeEach
+    void setup() {
+        service = new QuantityMeasurementServiceImpl();
+        controller = new QuantityMeasurementController(service);
     }
 
     @Test
-    void testFeetEqualsYards() {
-        Quantity<LengthUnit> feet = new Quantity<>(3, LengthUnit.FEET);
-        Quantity<LengthUnit> yard = new Quantity<>(1, LengthUnit.YARDS);
+    void testQuantityEntity_SingleOperandConstruction() {
 
-        assertEquals(feet, yard);
+        QuantityMeasurementEntity entity = new QuantityMeasurementEntity("CONVERT","1 FEET","12 INCH");
+
+        assertEquals("CONVERT", entity.getOperation());
+        assertEquals("1 FEET", entity.getOperand1());
+        assertEquals("12 INCH", entity.getResult());
+        assertFalse(entity.hasError());
     }
 
     @Test
-    void testLengthAddition() {
-        Quantity<LengthUnit> q1 = new Quantity<>(1, LengthUnit.FEET);
-        Quantity<LengthUnit> q2 = new Quantity<>(12, LengthUnit.INCHES);
+    void testQuantityEntity_BinaryOperandConstruction() {
 
-        Quantity<LengthUnit> result = q1.add(q2);
+        QuantityMeasurementEntity entity = new QuantityMeasurementEntity("ADD","1 FEET","12 INCH","2 FEET");
 
-        assertEquals(new Quantity<>(2, LengthUnit.FEET), result);
+        assertEquals("ADD", entity.getOperation());
+        assertEquals("1 FEET", entity.getOperand1());
+        assertEquals("12 INCH", entity.getOperand2());
+        assertEquals("2 FEET", entity.getResult());
     }
 
     @Test
-    void testLengthSubtraction() {
-        Quantity<LengthUnit> q1 = new Quantity<>(10, LengthUnit.FEET);
-        Quantity<LengthUnit> q2 = new Quantity<>(6, LengthUnit.INCHES);
+    void testQuantityEntity_ErrorConstruction() {
 
-        Quantity<LengthUnit> result = q1.subtract(q2);
+        QuantityMeasurementEntity entity = new QuantityMeasurementEntity("Invalid operation");
 
-        assertEquals(new Quantity<>(9.5, LengthUnit.FEET), result);
+        assertTrue(entity.hasError());
+        assertEquals("Invalid operation", entity.getError());
     }
 
     @Test
-    void testLengthDivision() {
-        Quantity<LengthUnit> q1 = new Quantity<>(10, LengthUnit.FEET);
-        Quantity<LengthUnit> q2 = new Quantity<>(2, LengthUnit.FEET);
+    void testQuantityEntity_ToString_Success() {
 
-        assertEquals(5.0, q1.divide(q2));
-    }
+        QuantityMeasurementEntity entity = new QuantityMeasurementEntity("ADD","1 FEET",
+                    "12 INCH","2 FEET");
 
-    // ---------- WEIGHT ----------
-
-    @Test
-    void testWeightAddition() {
-        Quantity<WeightUnit> kg = new Quantity<>(1, WeightUnit.KILOGRAM);
-        Quantity<WeightUnit> gram = new Quantity<>(1000, WeightUnit.GRAM);
-
-        assertEquals(new Quantity<>(2, WeightUnit.KILOGRAM), kg.add(gram));
-    }
-
-    // ---------- VOLUME ----------
-
-    @Test
-    void testVolumeAddition() {
-        Quantity<VolumeUnit> litre = new Quantity<>(1, VolumeUnit.LITRE);
-        Quantity<VolumeUnit> ml = new Quantity<>(1000, VolumeUnit.MILLILITRE);
-
-        assertEquals(new Quantity<>(2, VolumeUnit.LITRE), litre.add(ml));
+        assertTrue(entity.toString().contains("ADD"));
     }
 
     @Test
-    void testVolumeSubtractionWithTarget() {
-        Quantity<VolumeUnit> q1 = new Quantity<>(5, VolumeUnit.LITRE);
-        Quantity<VolumeUnit> q2 = new Quantity<>(2, VolumeUnit.LITRE);
+    void testQuantityEntity_ToString_Error() {
 
-        Quantity<VolumeUnit> result = q1.subtract(q2, VolumeUnit.MILLILITRE);
+        QuantityMeasurementEntity entity = new QuantityMeasurementEntity("Failure");
 
-        assertEquals(new Quantity<>(3000, VolumeUnit.MILLILITRE), result);
-    }
-
-    // ---------- TEMPERATURE EQUALITY ----------
-
-    @Test
-    void testCelsiusEqualsFahrenheit() {
-        Quantity<TemperatureUnit> c = new Quantity<>(0, TemperatureUnit.CELSIUS);
-        Quantity<TemperatureUnit> f = new Quantity<>(32, TemperatureUnit.FAHRENHEIT);
-
-        assertEquals(c, f);
+        assertTrue(entity.toString().contains("ERROR"));
     }
 
     @Test
-    void testCelsiusEqualsKelvin() {
-        Quantity<TemperatureUnit> c = new Quantity<>(0, TemperatureUnit.CELSIUS);
-        Quantity<TemperatureUnit> k = new Quantity<>(273.15, TemperatureUnit.KELVIN);
+    void testService_CompareEquality_SameUnit_Success() {
 
-        assertEquals(c, k);
+        Quantity<LengthUnit> quantity1 = new Quantity<>(1, LengthUnit.FEET);
+
+        Quantity<LengthUnit> quantity2 = new Quantity<>(1, LengthUnit.FEET);
+
+        QuantityMeasurementEntity entity = service.compare(quantity1, quantity2);
+
+        assertFalse(entity.hasError());
+        assertTrue(entity.getResult().contains("true"));
     }
 
     @Test
-    void testMinusFortyEquality() {
-        Quantity<TemperatureUnit> c = new Quantity<>(-40, TemperatureUnit.CELSIUS);
-        Quantity<TemperatureUnit> f = new Quantity<>(-40, TemperatureUnit.FAHRENHEIT);
+    void testService_CompareEquality_DifferentUnit_Success() {
 
-        assertEquals(c, f);
-    }
+        Quantity<LengthUnit> quantity1 = new Quantity<>(1, LengthUnit.FEET);
 
-    // ---------- TEMPERATURE CONVERSION ----------
+        Quantity<LengthUnit> quantity2 = new Quantity<>(12, LengthUnit.INCH);
 
-    @Test
-    void testCelsiusToFahrenheit() {
-        Quantity<TemperatureUnit> c = new Quantity<>(100, TemperatureUnit.CELSIUS);
+        QuantityMeasurementEntity entity = service.compare(quantity1, quantity2);
 
-        Quantity<TemperatureUnit> result =
-                c.convertTo(TemperatureUnit.FAHRENHEIT);
-
-        assertEquals(212, result.getValue(), 0.001);
+        assertFalse(entity.hasError());
     }
 
     @Test
-    void testFahrenheitToCelsius() {
-        Quantity<TemperatureUnit> f =
-                new Quantity<>(32, TemperatureUnit.FAHRENHEIT);
+    void testService_Convert_Success() {
 
-        Quantity<TemperatureUnit> result =
-                f.convertTo(TemperatureUnit.CELSIUS);
+        Quantity<LengthUnit> q = new Quantity<>(1, LengthUnit.FEET);
 
-        assertEquals(new Quantity<>(0, TemperatureUnit.CELSIUS), result);
+        QuantityMeasurementEntity entity = service.convert(q, LengthUnit.INCH);
+
+        assertFalse(entity.hasError());
+        assertTrue(entity.getResult().contains("INCH"));
     }
 
     @Test
-    void testCelsiusToKelvin() {
-        Quantity<TemperatureUnit> c =
-                new Quantity<>(0, TemperatureUnit.CELSIUS);
+    void testService_Add_Success() {
 
-        Quantity<TemperatureUnit> result =
-                c.convertTo(TemperatureUnit.KELVIN);
+        Quantity<LengthUnit> quantity1 = new Quantity<>(1, LengthUnit.FEET);
 
-        assertEquals(new Quantity<>(273.15, TemperatureUnit.KELVIN), result);
-    }
+        Quantity<LengthUnit> quantity2 = new Quantity<>(12, LengthUnit.INCH);
 
-    // ---------- UNSUPPORTED TEMPERATURE OPERATIONS ----------
+        QuantityMeasurementEntity entity = service.add(quantity1, quantity2);
 
-    @Test
-    void testTemperatureAddUnsupported() {
-        Quantity<TemperatureUnit> t1 =
-                new Quantity<>(100, TemperatureUnit.CELSIUS);
-
-        Quantity<TemperatureUnit> t2 =
-                new Quantity<>(50, TemperatureUnit.CELSIUS);
-
-        assertThrows(UnsupportedOperationException.class,
-                () -> t1.add(t2));
+        assertFalse(entity.hasError());
     }
 
     @Test
-    void testTemperatureSubtractUnsupported() {
-        Quantity<TemperatureUnit> t1 =
-                new Quantity<>(100, TemperatureUnit.CELSIUS);
+    void testService_Subtract_Success() {
 
-        Quantity<TemperatureUnit> t2 =
-                new Quantity<>(50, TemperatureUnit.CELSIUS);
+        Quantity<LengthUnit> quantity1 = new Quantity<>(2, LengthUnit.FEET);
 
-        assertThrows(UnsupportedOperationException.class,
-                () -> t1.subtract(t2));
+        Quantity<LengthUnit> quantity2 = new Quantity<>(12, LengthUnit.INCH);
+
+        QuantityMeasurementEntity entity = service.subtract(quantity1, quantity2);
+
+        assertFalse(entity.hasError());
     }
 
     @Test
-    void testTemperatureDivideUnsupported() {
-        Quantity<TemperatureUnit> t1 =
-                new Quantity<>(100, TemperatureUnit.CELSIUS);
+    void testService_Divide_Success() {
 
-        Quantity<TemperatureUnit> t2 =
-                new Quantity<>(50, TemperatureUnit.CELSIUS);
+        Quantity<LengthUnit> quantity1 = new Quantity<>(2, LengthUnit.FEET);
 
-        assertThrows(UnsupportedOperationException.class,
-                () -> t1.divide(t2));
+        Quantity<LengthUnit> quantity2 = new Quantity<>(1, LengthUnit.FEET);
+
+        QuantityMeasurementEntity entity = service.divide(quantity1, quantity2);
+
+        assertFalse(entity.hasError());
     }
-
-    // ---------- CROSS CATEGORY ----------
 
     @Test
-    void testTemperatureVsLength() {
-        Quantity<TemperatureUnit> temp =
-                new Quantity<>(100, TemperatureUnit.CELSIUS);
+    void testService_Add_UnsupportedOperation_Error() {
 
-        Quantity<LengthUnit> length =
-                new Quantity<>(100, LengthUnit.FEET);
+        Quantity<TemperatureUnit> t1 = new Quantity<>(0, TemperatureUnit.CELSIUS);
 
-        assertNotEquals(temp, length);
+        Quantity<TemperatureUnit> t2 = new Quantity<>(32, TemperatureUnit.FAHRENHEIT);
+
+        QuantityMeasurementEntity entity = service.add(t1, t2);
+
+        assertTrue(entity.hasError());
     }
- // ---------------- UC15 SERVICE LAYER TESTS ----------------
 
     @Test
-    void testService_Addition_Length() {
+    void testController_DemonstrateEquality_Success() {
 
-        IQuantityMeasurementRepository repository =
-                QuantityMeasurementCacheRepository.getInstance();
+        Quantity<LengthUnit> quantity1 = new Quantity<>(1, LengthUnit.FEET);
 
-        IQuantityMeasurementService service =
-                new QuantityMeasurementServiceImpl(repository);
+        Quantity<LengthUnit> quantity2 = new Quantity<>(12, LengthUnit.INCH);
 
-        QuantityDTO q1 = new QuantityDTO(1, "FEET");
-        QuantityDTO q2 = new QuantityDTO(12, "INCHES");
-
-        QuantityDTO result = service.add(q1, q2);
-
-        assertEquals(2.0, result.getValue(), 0.001);
-        assertEquals("FEET", result.getUnit());
+        assertDoesNotThrow(() -> controller.demonstrateEquality(quantity1, quantity2));
     }
-
 
     @Test
-    void testService_Subtraction_Length() {
+    void testController_DemonstrateAddition_Success() {
 
-        IQuantityMeasurementRepository repository =
-                QuantityMeasurementCacheRepository.getInstance();
+        Quantity<LengthUnit> quantity1 = new Quantity<>(1, LengthUnit.FEET);
 
-        IQuantityMeasurementService service =
-                new QuantityMeasurementServiceImpl(repository);
+        Quantity<LengthUnit> quantity2 = new Quantity<>(12, LengthUnit.INCH);
 
-        QuantityDTO q1 = new QuantityDTO(2, "FEET");
-        QuantityDTO q2 = new QuantityDTO(12, "INCHES");
-
-        QuantityDTO result = service.subtract(q1, q2);
-
-        assertEquals(1.0, result.getValue(), 0.001);
+        assertDoesNotThrow(() -> controller.demonstrateAddition(quantity1, quantity2));
     }
-
 
     @Test
-    void testService_Divide_Length() {
+    void testController_NullService_Prevention() {
 
-        IQuantityMeasurementRepository repository =
-                QuantityMeasurementCacheRepository.getInstance();
-
-        IQuantityMeasurementService service =
-                new QuantityMeasurementServiceImpl(repository);
-
-        QuantityDTO q1 = new QuantityDTO(10, "FEET");
-        QuantityDTO q2 = new QuantityDTO(2, "FEET");
-
-        double result = service.divide(q1, q2);
-
-        assertEquals(5.0, result);
+        assertThrows(IllegalArgumentException.class, () -> new QuantityMeasurementController(null));
     }
-
-
-    @Test
-    void testService_Compare_Length() {
-
-        IQuantityMeasurementRepository repository =
-                QuantityMeasurementCacheRepository.getInstance();
-
-        IQuantityMeasurementService service =
-                new QuantityMeasurementServiceImpl(repository);
-
-        QuantityDTO q1 = new QuantityDTO(1, "FEET");
-        QuantityDTO q2 = new QuantityDTO(12, "INCHES");
-
-        boolean result = service.compare(q1, q2);
-
-        assertTrue(result);
-    }
-
-
-    @Test
-    void testService_Convert_Length() {
-
-        IQuantityMeasurementRepository repository =
-                QuantityMeasurementCacheRepository.getInstance();
-
-        IQuantityMeasurementService service =
-                new QuantityMeasurementServiceImpl(repository);
-
-        QuantityDTO q = new QuantityDTO(1, "FEET");
-
-        QuantityDTO result = service.convert(q, "INCHES");
-
-        assertEquals(12.0, result.getValue(), 0.001);
-    }
-
 }

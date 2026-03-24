@@ -1,146 +1,94 @@
+
 package com.apps.quantitymeasurement.service;
+import com.apps.quantitymeasurement.entity.*;
+import com.apps.quantitymeasurement.unit.*;
 
-import com.apps.quantitymeasurement.dto.QuantityDTO;
-import com.apps.quantitymeasurement.entity.QuantityMeasurementEntity;
-import com.apps.quantitymeasurement.exception.QuantityMeasurementException;
-import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
-import com.apps.quantitymeasurement.unit.LengthUnit;
-import com.apps.quantitymeasurement.unit.Quantity;
+@SuppressWarnings("unchecked")
+public class QuantityMeasurementServiceImpl implements IQuantityMeasurementService {
 
-public class QuantityMeasurementServiceImpl
-        implements IQuantityMeasurementService {
-
-    private IQuantityMeasurementRepository repository;
-
-    public QuantityMeasurementServiceImpl(IQuantityMeasurementRepository repository) {
-        this.repository = repository;
-    }
-
-    // ---------------- COMPARE ----------------
     @Override
-    public boolean compare(QuantityDTO q1, QuantityDTO q2) {
+    public QuantityMeasurementEntity compare(Quantity<?> q1, Quantity<?> q2) {
+
         try {
-            Quantity<LengthUnit> quantity1 =
-                    new Quantity<>(q1.getValue(), LengthUnit.valueOf(q1.getUnit()));
+            boolean result = q1.equals(q2);
 
-            Quantity<LengthUnit> quantity2 =
-                    new Quantity<>(q2.getValue(), LengthUnit.valueOf(q2.getUnit()));
-
-            return quantity1.equals(quantity2);
+            return new QuantityMeasurementEntity(
+                    "COMPARE",
+                    q1.toString(),
+                    q2.toString(),
+                    String.valueOf(result));
 
         } catch (Exception e) {
-            throw new QuantityMeasurementException("Comparison failed: " + e.getMessage());
+            return new QuantityMeasurementEntity(e.getMessage());
         }
     }
 
-    // ---------------- CONVERT ----------------
-    @Override
-    public QuantityDTO convert(QuantityDTO quantity, String targetUnit) {
+   @Override
+    public QuantityMeasurementEntity convert(Quantity<?> quantity, Object targetUnit) {
 
         try {
-            Quantity<LengthUnit> q =
-                    new Quantity<>(quantity.getValue(), LengthUnit.valueOf(quantity.getUnit()));
+            Quantity result = ((Quantity) quantity).convertTo((IMeasurable) targetUnit);
 
-            Quantity<LengthUnit> result =
-                    q.convertTo(LengthUnit.valueOf(targetUnit));
-
-            saveEntity("CONVERT", quantity, null, result.getValue(), false);
-
-            return new QuantityDTO(result.getValue(), result.getUnit().name());
+            return new QuantityMeasurementEntity(
+                    "CONVERT",
+                    quantity.toString(),
+                    result.toString());
 
         } catch (Exception e) {
-            saveEntity("CONVERT", quantity, null, 0, true);
-            throw new QuantityMeasurementException("Conversion failed: " + e.getMessage());
+            return new QuantityMeasurementEntity(e.getMessage());
         }
     }
 
-    // ---------------- ADD ----------------
     @Override
-    public QuantityDTO add(QuantityDTO q1, QuantityDTO q2) {
+    public QuantityMeasurementEntity add(Quantity<?> q1, Quantity<?> q2) {
 
         try {
-            Quantity<LengthUnit> quantity1 =
-                    new Quantity<>(q1.getValue(), LengthUnit.valueOf(q1.getUnit()));
+            Quantity result = ((Quantity) q1).add((Quantity) q2);
 
-            Quantity<LengthUnit> quantity2 =
-                    new Quantity<>(q2.getValue(), LengthUnit.valueOf(q2.getUnit()));
-
-            Quantity<LengthUnit> result = quantity1.add(quantity2);
-
-            saveEntity("ADD", q1, q2, result.getValue(), false);
-
-            return new QuantityDTO(result.getValue(), result.getUnit().name());
+            return new QuantityMeasurementEntity(
+                    "ADD",
+                    q1.toString(),
+                    q2.toString(),
+                    result.toString());
 
         } catch (Exception e) {
-            saveEntity("ADD", q1, q2, 0, true);
-            throw new QuantityMeasurementException("Addition failed: " + e.getMessage());
+            return new QuantityMeasurementEntity(e.getMessage());
         }
     }
 
-    // ---------------- SUBTRACT ----------------
     @Override
-    public QuantityDTO subtract(QuantityDTO q1, QuantityDTO q2) {
+    public QuantityMeasurementEntity subtract(Quantity<?> q1,
+                                              Quantity<?> q2) {
 
         try {
-            Quantity<LengthUnit> quantity1 =
-                    new Quantity<>(q1.getValue(), LengthUnit.valueOf(q1.getUnit()));
+            Quantity result = ((Quantity) q1).subtract((Quantity) q2);
 
-            Quantity<LengthUnit> quantity2 =
-                    new Quantity<>(q2.getValue(), LengthUnit.valueOf(q2.getUnit()));
-
-            Quantity<LengthUnit> result = quantity1.subtract(quantity2);
-
-            saveEntity("SUBTRACT", q1, q2, result.getValue(), false);
-
-            return new QuantityDTO(result.getValue(), result.getUnit().name());
+            return new QuantityMeasurementEntity(
+                    "SUBTRACT",
+                    q1.toString(),
+                    q2.toString(),
+                    result.toString());
 
         } catch (Exception e) {
-            saveEntity("SUBTRACT", q1, q2, 0, true);
-            throw new QuantityMeasurementException("Subtraction failed: " + e.getMessage());
+            return new QuantityMeasurementEntity(e.getMessage());
         }
     }
 
-    // ---------------- DIVIDE ----------------
     @Override
-    public double divide(QuantityDTO q1, QuantityDTO q2) {
+    public QuantityMeasurementEntity divide(Quantity<?> q1,
+                                            Quantity<?> q2) {
 
         try {
-            Quantity<LengthUnit> quantity1 =
-                    new Quantity<>(q1.getValue(), LengthUnit.valueOf(q1.getUnit()));
+            double result = ((Quantity) q1).divide((Quantity) q2);
 
-            Quantity<LengthUnit> quantity2 =
-                    new Quantity<>(q2.getValue(), LengthUnit.valueOf(q2.getUnit()));
-
-            double result = quantity1.divide(quantity2);
-
-            saveEntity("DIVIDE", q1, q2, result, false);
-
-            return result;
+            return new QuantityMeasurementEntity(
+                    "DIVIDE",
+                    q1.toString(),
+                    q2.toString(),
+                    String.valueOf(result));
 
         } catch (Exception e) {
-            saveEntity("DIVIDE", q1, q2, 0, true);
-            throw new QuantityMeasurementException("Division failed: " + e.getMessage());
+            return new QuantityMeasurementEntity(e.getMessage());
         }
-    }
-
-    // ---------------- COMMON SAVE METHOD ----------------
-    private void saveEntity(String operation,
-                           QuantityDTO q1,
-                           QuantityDTO q2,
-                           double result,
-                           boolean error) {
-
-        QuantityMeasurementEntity entity = new QuantityMeasurementEntity(
-                operation,
-                q1 != null ? q1.getValue() : 0,
-                q2 != null ? q2.getValue() : 0,
-                q1 != null ? q1.getUnit() : null,
-                q2 != null ? q2.getUnit() : null,
-                "LENGTH", // can be enhanced dynamically
-                result,
-                error
-        );
-
-        repository.save(entity);
     }
 }

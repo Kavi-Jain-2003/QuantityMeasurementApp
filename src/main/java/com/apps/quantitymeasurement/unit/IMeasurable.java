@@ -5,22 +5,13 @@ interface SupportsArithmetic {
 }
 
 public interface IMeasurable {
+    double getConversionFactor();
 
-    // Mandatory methods (already implemented by enums)
-    double convertToBaseUnit(double value);
+    double convertToBase(double value);
 
-    double convertFromBaseUnit(double value);
+    double convertFromBase(double value);
+    
+    String getUnitName();
 
-    // Default lambda: arithmetic supported
-    SupportsArithmetic supportsArithmetic = () -> true;
-
-    // Default method
-    default boolean supportsArithmetic() {
-        return supportsArithmetic.isSupported();
-    }
-
-    // Default validation method
-    default void validateOperationSupport(String operation) {
-        // Do nothing by default
-    }
+    default void validOperationSupport(String operation){}
 }

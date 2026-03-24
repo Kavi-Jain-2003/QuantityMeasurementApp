@@ -1,36 +1,40 @@
 package com.apps.quantitymeasurement.unit;
 
-import java.util.function.Function;
+public enum TemperatureUnit implements IMeasurable {
 
-public enum TemperatureUnit implements IMeasurable{
-    CELSIUS(c -> c, c -> c),
-    FAHRENHEIT(f -> (f - 32) * 5 / 9, c -> (c * 9 / 5) + 32);
+    CELSIUS {
+        public double convertToBase(double value) { return value; }
+        public double convertFromBase(double value) { return value; }
+    },
 
-    private final Function<Double, Double> toCelsius;
-    private final Function<Double, Double> fromCelsius;
+    FAHRENHEIT {
+        public double convertToBase(double value) { return (value - 32) * 5 / 9; }
+        public double convertFromBase(double value) { return (value * 9 / 5) + 32; }
+    },
+
+    KELVIN {
+        public double convertToBase(double value) { return value - 273.15; }
+        public double convertFromBase(double value) { return value + 273.15; }
+    };
 
     private static final SupportsArithmetic supportsArithmetic = () -> false;
 
-    TemperatureUnit(Function<Double, Double> toCelsius, Function<Double, Double> fromCelsius) {
-        this.toCelsius = toCelsius;
-        this.fromCelsius = fromCelsius;
+    @Override
+    public double getConversionFactor() {
+        return 1.0;
     }
 
     @Override
-    public double convertToBase(double value){ return toCelsius.apply(value); }
-
-    @Override
-    public double convertFromBase(double baseValue){ return fromCelsius.apply(baseValue); }
-
-    @Override
-    public double getConversionFactor(){ return 1.0; }
-
-    @Override
-    public String getUnitName(){ return name(); }
+    public String getUnitName() {
+        return name();
+    }
 
     @Override
     public void validOperationSupport(String operation) {
-        if (supportsArithmetic.isSupported() == false)
-            throw new UnsupportedOperationException("Unsupportable Operation");
+        if (!supportsArithmetic.isSupported()) {
+            throw new UnsupportedOperationException(
+                    "Temperature does not support " + operation
+            );
+        }
     }
 }

@@ -1,12 +1,10 @@
-
 package com.apps.quantitymeasurement.controller;
 
-import com.apps.quantitymeasurement.model.QuantityDTO;
 import com.apps.quantitymeasurement.model.QuantityMeasurementDTO;
 import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.apps.quantitymeasurement.model.QuantityModel;
 import com.apps.quantitymeasurement.unit.Quantity;
 import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
-import com.apps.quantitymeasurement.unit.LengthUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,59 +15,39 @@ public class QuantityMeasurementController {
     @Autowired
     private IQuantityMeasurementService service;
 
+    private Quantity<?> getQ1(QuantityMeasurementDTO input) {
+        return QuantityModel.toQuantity(input.getThisQuantityDTO());
+    }
+
+    private Quantity<?> getQ2(QuantityMeasurementDTO input) {
+        return QuantityModel.toQuantity(input.getThatQuantityDTO());
+    }
+
     @PostMapping("/compare")
     public QuantityMeasurementEntity compare(@RequestBody QuantityMeasurementDTO input) {
-
-        QuantityDTO quantity1 = input.getThisQuantityDTO();
-        QuantityDTO quantity2 = input.getThatQuantityDTO();
-
-        Quantity q1 = new Quantity(quantity1.getValue(), LengthUnit.valueOf(quantity1.getUnit()));
-        Quantity q2 = new Quantity(quantity2.getValue(), LengthUnit.valueOf(quantity2.getUnit()));
-
-        return service.compare(q1, q2);
+        return service.compare(getQ1(input), getQ2(input));
     }
 
     @PostMapping("/add")
     public QuantityMeasurementEntity add(@RequestBody QuantityMeasurementDTO input) {
-        QuantityDTO quantity1 = input.getThisQuantityDTO();
-        QuantityDTO quantity2 = input.getThatQuantityDTO();
-
-        Quantity q1 = new Quantity(quantity1.getValue(), LengthUnit.valueOf(quantity1.getUnit()));
-        Quantity q2 = new Quantity(quantity2.getValue(), LengthUnit.valueOf(quantity2.getUnit()));
-
-        return service.add(q1, q2);
+        return service.add(getQ1(input), getQ2(input));
     }
 
     @PostMapping("/subtract")
     public QuantityMeasurementEntity subtract(@RequestBody QuantityMeasurementDTO input) {
-        QuantityDTO quantity1 = input.getThisQuantityDTO();
-        QuantityDTO quantity2 = input.getThatQuantityDTO();
-
-        Quantity q1 = new Quantity(quantity1.getValue(), LengthUnit.valueOf(quantity1.getUnit()));
-        Quantity q2 = new Quantity(quantity2.getValue(), LengthUnit.valueOf(quantity2.getUnit()));
-
-        return service.subtract(q1, q2);
-    }
-
-    @PostMapping("/convert")
-    public QuantityMeasurementEntity convert(@RequestBody QuantityMeasurementDTO input) {
-        QuantityDTO quantity1 = input.getThisQuantityDTO();
-        QuantityDTO quantity2 = input.getThatQuantityDTO();
-
-        Quantity q1 = new Quantity(quantity1.getValue(), LengthUnit.valueOf(quantity1.getUnit()));
-        Quantity q2 = new Quantity(quantity2.getValue(), LengthUnit.valueOf(quantity2.getUnit()));
-
-        return service.convert(q1, q2);
+        return service.subtract(getQ1(input), getQ2(input));
     }
 
     @PostMapping("/divide")
     public QuantityMeasurementEntity divide(@RequestBody QuantityMeasurementDTO input) {
-        QuantityDTO quantity1 = input.getThisQuantityDTO();
-        QuantityDTO quantity2 = input.getThatQuantityDTO();
+        return service.divide(getQ1(input), getQ2(input));
+    }
 
-        Quantity q1 = new Quantity(quantity1.getValue(), LengthUnit.valueOf(quantity1.getUnit()));
-        Quantity q2 = new Quantity(quantity2.getValue(), LengthUnit.valueOf(quantity2.getUnit()));
+    @PostMapping("/convert")
+    public QuantityMeasurementEntity convert(@RequestBody QuantityMeasurementDTO input) {
+        Quantity<?> q1 = getQ1(input);
+        Quantity<?> q2 = getQ2(input);
 
-        return service.divide(q1, q2);
+        return service.convert(q1, q2.getUnit()); // 🔥 correct fix
     }
 }

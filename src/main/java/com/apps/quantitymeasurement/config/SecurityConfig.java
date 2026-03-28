@@ -36,7 +36,7 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-    //  Authentication Manager (FIXED)
+    
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http,
                                                        PasswordEncoder passwordEncoder) throws Exception {
@@ -50,20 +50,21 @@ public class SecurityConfig {
         return builder.build();
     }
 
-    //  Password Encoder (FIXED IMPORT)
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance(); // plain text
     }
 
-    // Security Filter Chain (MANDATORY in new Spring Security)
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login", "/login/oauth2/**", "/oauth2/**").permitAll()
+            		.requestMatchers("/auth/login", "/auth/register", "/login/oauth2/**", "/oauth2/**").permitAll()
+
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth -> oauth

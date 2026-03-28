@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+	private final String SECRET = "mysecretkeymysecretkeymysecretkey123";
+
+	private Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+
     
 
     public String generateToken(String username) {
@@ -29,4 +32,19 @@ public class JwtUtil {
                 .getBody()
                 .getSubject();
     }
+    public boolean validateToken(String token, org.springframework.security.core.userdetails.UserDetails userDetails) {
+        String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    private boolean isTokenExpired(String token) {
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+
+        return expiration.before(new Date());
+    }
+
 }

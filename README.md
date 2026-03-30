@@ -20,6 +20,8 @@ main
                                                         └── feature/UC14-Temperature-Measurement-With-Selective-Arithmetic-Support-And-Measurable-Refactoring
                                                             └── feature/UC15-N-Tier
                                                                 └── feature/UC16-Database-Integration-With-JDBC-For-Quantity-Measurement-Persistence
+└── feature/UC17-Spring-Backend
+└── feature/UC18-Google-Authentication-and-user-management
 
 ```
 
@@ -40,5 +42,7 @@ main
 <h2>UC14-TemperaturE-Measurement-with-Selective-Arithmetic-Support-and-Measurable-Refactoring</h2>
 <h2>UC15-N-Tier</h2>
 <h2>UC16-Database-Integration-with-JDBC-for-Quantity-Measurement-Persistence</h2>
+<h2>feature/UC17-Spring-Backend</h2>
+<h2>feature/UC18-Google-Authnetication-and-user-management</h2>
 
 

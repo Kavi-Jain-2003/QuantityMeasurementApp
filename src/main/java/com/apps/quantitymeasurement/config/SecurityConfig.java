@@ -2,6 +2,7 @@ package com.apps.quantitymeasurement.config;
 
 import org.springframework.context.annotation.Bean;
 
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,10 +12,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.apps.quantitymeasurement.model.User;
+import com.apps.quantitymeasurement.repository.UserRepository;
 import com.apps.quantitymeasurement.security.JwtFilter;
 import com.apps.quantitymeasurement.security.JwtUtil;
 import com.apps.quantitymeasurement.service.CustomUserDetailsService;
@@ -24,6 +27,9 @@ import jakarta.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	@Autowired
+	private UserRepository userRepository;
+
 	@Autowired
 	private JwtFilter jwtFilter;
 	private final JwtUtil jwtUtil;
@@ -63,20 +69,40 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-            		.requestMatchers("/auth/login", "/auth/register", "/login/oauth2/**", "/oauth2/**").permitAll()
+            		.requestMatchers(
+            			    "/auth/login",
+            			    "/auth/register",
+            			    "/login/oauth2/**",
+            			    "/oauth2/**"
+            			).permitAll()
+
 
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth -> oauth
-                .successHandler((request, response, authentication) -> {
+            	    .successHandler((request, response, authentication) -> {
 
-                    String username = authentication.getName();
-                    String token = jwtUtil.generateToken(username);
+            	        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-                    response.setContentType("application/json");
-                    response.getWriter().write("{\"token\": \"" + token + "\"}");
-                })
-            )
+            	        String email = oAuth2User.getAttribute("email");
+            	        String name = oAuth2User.getAttribute("name");
+
+            	        if (!userRepository.existsByUsername(email)) {
+            	            User user = new User();
+            	            user.setUsername(email);
+            	            user.setPassword("OAUTH_USER");
+            	            user.setProvider("GOOGLE");
+            	            user.setRole("USER");
+            	            userRepository.save(user);
+            	        }
+
+            	        String token = jwtUtil.generateToken(email);
+
+            	        response.setContentType("application/json");
+            	        response.getWriter().write("{\"token\": \"" + token + "\"}");
+            	    })
+            	)
+
             .exceptionHandling(ex -> ex
                     .authenticationEntryPoint((request, response, authException) -> {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

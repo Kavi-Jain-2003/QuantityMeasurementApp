@@ -56,15 +56,17 @@ public class JwtFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
 
-                } catch (Exception e) {
-                    // IMPORTANT: fallback for OAuth users not in DB
+                } 
+                //IMPORTANT: fallback for OAuth users not in DB
+                catch (Exception e) {
                     UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(
-                                    username, null, null
-                            );
+                        new UsernamePasswordAuthenticationToken(
+                                username, null, null
+                        );
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
+
             }
         }
 

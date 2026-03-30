@@ -1,7 +1,10 @@
 package com.apps.quantitymeasurement.auth;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -20,19 +23,38 @@ public class AuthController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	@PostMapping("/login")
-	public String login(@RequestBody User user) {
+	public ResponseEntity<?> login(@RequestBody User user) {
 
-	    System.out.println("LOGIN HIT: " + user.getUsername()); 
+	    System.out.println("LOGIN HIT: " + user.getUsername());
 
-	    Authentication authentication = authManager.authenticate(
-	            new UsernamePasswordAuthenticationToken(
-	                    user.getUsername(),
-	                    user.getPassword()
-	            )
-	    );
+	    try {
+	        Authentication authentication = authManager.authenticate(
+	                new UsernamePasswordAuthenticationToken(
+	                        user.getUsername(),
+	                        user.getPassword()
+	                )
+	        );
 
-	    return jwtUtil.generateToken(user.getUsername());
+	        String token = jwtUtil.generateToken(user.getUsername());
+
+	        return ResponseEntity.ok(
+	                Map.of(
+	                        "status", 200,
+	                        "token", token
+	                )
+	        );
+
+	    } catch (BadCredentialsException e) {
+
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+	                Map.of(
+	                        "status", 401,
+	                        "message", "Invalid username or password"
+	                )
+	        );
+	    }
 	}
+
 	@PostMapping("/register")
 	public String register(@RequestBody User user) {
 
@@ -43,9 +65,7 @@ public class AuthController {
 
 	    // save user
 	    userRepository.save(user);
-
-	    // generate token (optional but recommended)
-	    return jwtUtil.generateToken(user.getUsername());
+	    return "user registered successfully";
 	}
 
 	  @GetMapping("/secure")

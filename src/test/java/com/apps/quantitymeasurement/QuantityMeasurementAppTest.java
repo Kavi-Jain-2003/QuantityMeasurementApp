@@ -21,7 +21,7 @@ public class QuantityMeasurementAppTest {
     @Test
     void testFeetEqualsInches() {
         Quantity<LengthUnit> feet = new Quantity<>(1, LengthUnit.FEET);
-        Quantity<LengthUnit> inches = new Quantity<>(12, LengthUnit.INCHES);
+        Quantity<LengthUnit> inches = new Quantity<>(12, LengthUnit.INCH);
 
         assertEquals(feet, inches);
     }
@@ -47,7 +47,7 @@ public class QuantityMeasurementAppTest {
     @Test
     void testLengthSubtraction() {
         Quantity<LengthUnit> q1 = new Quantity<>(10, LengthUnit.FEET);
-        Quantity<LengthUnit> q2 = new Quantity<>(6, LengthUnit.INCHES);
+        Quantity<LengthUnit> q2 = new Quantity<>(6, LengthUnit.INCH);
 
         Quantity<LengthUnit> result = q1.subtract(q2);
 

@@ -19,7 +19,9 @@ main
                                                     └── feature/UC13-Centralized-Arithmetic-Logic-To-Enforce-DRY-In-Quantity-Operations
                                                         └── feature/UC14-Temperature-Measurement-With-Selective-Arithmetic-Support-And-Measurable-Refactoring
                                                             └── feature/UC15-N-Tier
-                                                                └── feature/UC16-Database-Integration-With-JDBC-For-Quantity-Measurement-Persistence└── feature/UC17-Spring-Backend└── feature/UC18-Google-Authentication-and-user-management
+                                                                └── feature/UC16-Database-Integration-With-JDBC-For-Quantity-Measurement-Persistence
+                                                                    └── feature/UC17-Spring-Backend
+                                                                            └── feature/UC18-Google-Authentication-and-user-management
 
 ```
 

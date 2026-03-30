@@ -26,23 +26,65 @@ main
 ```
 
 
-<h2>UC1 Feet Measurement Quality </h2>
-<h2>UC2 Feet and Inches measurement equality</h2>
-<h2>UC3 Generic Quantity Class</h2>
-<h2>UC4 Extended Unit Support</h2>
-<h2>UC5 Unit-to-Unit Conversion</h2>
-<h2>UC6 Addition of two length units</h2>
-<h2>UC7-Addition-With-Target-Unit-Specification</h2>
-<h2>UC8-Refactoring-Unit-Enum-To-Standalone</h2>
-<h2>UC9-Weight-Measurement</h2>
-<h2>UC10-Generic-Quantity-Class-with-Unit-Interface-For-Multi-Category-Support</h2>
-<h2>UC11-Volume-Measurement-Equality-Conversion-And-Addition</h2>
-<h2>UC12-Subtraction-and-Division-Operations-on-Quantity-Measurements</h2>
-<h2>UC13-Centralized-Arithmetic-Logic-to-Enforce-DRY-in-Quantity-Operations</h2>
-<h2>UC14-TemperaturE-Measurement-with-Selective-Arithmetic-Support-and-Measurable-Refactoring</h2>
-<h2>UC15-N-Tier</h2>
-<h2>UC16-Database-Integration-with-JDBC-for-Quantity-Measurement-Persistence</h2>
-<h2>feature/UC17-Spring-Backend</h2>
-<h2>feature/UC18-Google-Authnetication-and-user-management</h2>
+## 📌 About the Application
+
+The **Quantity Measurement Application** is a scalable and extensible system designed to handle different types of measurements such as length, weight, volume, and temperature. It provides functionalities for comparing quantities, performing arithmetic operations, and converting values across different units with high accuracy.
+
+The application is built using a layered architecture (N-Tier) and follows clean coding principles like **DRY (Don’t Repeat Yourself)** and modular design. It evolves from basic unit comparisons to a full-fledged backend system with database integration, REST APIs, secure authentication using Google OAuth, and comprehensive unit testing.
+
+---
+
+## 🚀 Key Features
+
+* ✅ Unit comparison across different measurement types
+* ✅ Unit-to-unit conversion with precision
+* ✅ Arithmetic operations (addition, subtraction, division)
+* ✅ Multi-category support (Length, Weight, Volume, Temperature)
+* ✅ Clean and extensible design using interfaces
+* ✅ N-Tier architecture for scalability
+* ✅ Database integration using JDBC
+* ✅ RESTful APIs using Spring Boot
+* ✅ Secure authentication with Google OAuth
+* ✅ User management system
+* ✅ Unit testing using JUnit for reliability
+
+---
+
+## 🧪 Testing
+
+The application includes **JUnit-based test cases** to ensure correctness and reliability of all functionalities.
+
+* ✔️ Covers unit comparison and equality checks
+* ✔️ Validates unit conversions across categories
+* ✔️ Tests arithmetic operations (add, subtract, divide)
+* ✔️ Ensures edge case handling and accuracy
+* ✔️ Supports maintainable and regression-safe development
+
+---
+
+## 🛠️ Tech Stack
+
+* **Java** (Core Logic & OOP Concepts)
+* **Spring Boot** (Backend Development)
+* **JDBC** (Database Connectivity)
+* **MySQL / Relational DB** (Data Persistence)
+* **OAuth 2.0** (Authentication - Google Login)
+* **JUnit** (Unit Testing)
+* **Git & GitHub** (Version Control)
+
+---
+
+## 🎯 Objective
+
+The goal of this application is to demonstrate strong fundamentals in:
+
+* Object-Oriented Design
+* Clean Code Practices
+* Scalable Backend Development
+* Test-Driven Development (TDD) concepts
+* Real-world Problem Solving using Measurements
+
+---
+
 
 

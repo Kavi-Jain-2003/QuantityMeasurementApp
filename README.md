@@ -21,7 +21,7 @@ main
                                                             └── feature/UC15-N-Tier
                                                                 └── feature/UC16-Database-Integration-With-JDBC-For-Quantity-Measurement-Persistence
                                                                     └── feature/UC17-Spring-Backend
-                                                                            └── feature/UC18-Google-Authentication-and-user-management
+                                                                        └── feature/UC18-Google-Authentication-and-user-management
 
 ```
 

@@ -1,4 +1,5 @@
 package com.apps.quantitymeasurement.controller;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import com.apps.quantitymeasurement.model.QuantityMeasurementDTO;
 
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/quantities")
+@SecurityRequirement(name = "bearerAuth")
+
 public class QuantityMeasurementController {
 
     @Autowired

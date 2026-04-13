@@ -53,6 +53,19 @@ public class Quantity<U extends IMeasurable> {
         return createQuantityFromBase(diff, targetUnit);
 
     }
+    public Quantity<U> multiply(Quantity<U> other) {
+        return multiply(other, this.unit);
+    }
+
+    public Quantity<U> multiply(Quantity<U> other, U targetUnit) {
+        if (other == null) throw new IllegalArgumentException("Other quantity cannot be null!");
+        if (!this.unit.getClass().equals(other.unit.getClass()))
+            throw new IllegalArgumentException("Invalid category");
+
+        double result = this.value * other.value; 
+
+        return new Quantity<>(Math.round(result * 100.0) / 100.0, targetUnit);
+    }
 
     public double divide(Quantity<U> other){
         return operations(other, ArithmeticOperations.DIVIDE);
@@ -76,16 +89,22 @@ public class Quantity<U extends IMeasurable> {
             throw new IllegalArgumentException("Cannot divide by zero");
 
         switch (opr) {
-            case ADD:
-                return base1 + base2;
-            case SUBTRACT:
-                return base1 - base2;
-            case DIVIDE:
-                return base1 / base2;
-        
-            default:
-                throw new IllegalArgumentException("Unknown Arithmetic Operation");
-        }
+        case ADD:
+            return base1 + base2;
+
+        case SUBTRACT:
+            return base1 - base2;
+
+        case MULTIPLY:
+            return base1 * base2;   
+
+        case DIVIDE:
+            return base1 / base2;
+
+        default:
+            throw new IllegalArgumentException("Unknown Arithmetic Operation");
+    }
+
     }
 
     private Quantity<U> createQuantityFromBase(double value, U targetUnit){

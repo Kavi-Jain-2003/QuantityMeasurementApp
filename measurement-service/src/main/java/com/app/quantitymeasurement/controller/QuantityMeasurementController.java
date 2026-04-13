@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/measurement")
+@CrossOrigin(origins = "http://localhost:4200")
 //@SecurityRequirement(name = "bearerAuth")
 
 public class QuantityMeasurementController {
@@ -48,13 +49,19 @@ public class QuantityMeasurementController {
 	public QuantityMeasurementEntity divide(@RequestBody QuantityMeasurementDTO input) {
 		return service.divide(getQ1(input), getQ2(input));
 	}
+	@PostMapping("/multiply")
+	public QuantityMeasurementEntity multiply(@RequestBody QuantityMeasurementDTO input) {
+	    return service.multiply(getQ1(input), getQ2(input));
+	}
+
 
 	@PostMapping("/convert")
 	public QuantityMeasurementEntity convert(@RequestBody QuantityMeasurementDTO input) {
 		Quantity<?> q1 = getQ1(input);
 		Quantity<?> q2 = getQ2(input);
 
-		return service.convert(q1, q2.getUnit());
+		return service.convert(q1, q2);
+
 	}
 
 	@GetMapping("/test")

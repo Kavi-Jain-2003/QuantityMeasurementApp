@@ -15,6 +15,7 @@ import com.app.quantitymeasurement.security.JwtUtil;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 	@Autowired
 	private AuthenticationManager authManager;

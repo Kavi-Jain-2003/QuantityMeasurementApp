@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/quantity_measurement_db
+    url: jdbc:mysql://localhost:3306/uc18_userdb;
     username: root
     password: ckjain1166
 

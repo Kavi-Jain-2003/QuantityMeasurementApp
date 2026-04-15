@@ -1,119 +1,84 @@
-package com.app.quantitymeasurement.auth;
+package com.app.quantitymeasurement.config;
 
-import java.util.Map;
-
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
-import com.app.quantitymeasurement.model.User;
-import com.app.quantitymeasurement.repository.UserRepository;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.app.quantitymeasurement.security.JwtFilter;
 import com.app.quantitymeasurement.security.JwtUtil;
+import com.app.quantitymeasurement.service.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@RestController
-@RequestMapping("/auth")
-public class AuthController {
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authManager;
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
 
     @Autowired
-    private UserRepository userRepository;
+    private JwtFilter jwtFilter;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    // ================= LOGIN =================
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-
-        System.out.println("LOGIN HIT: " + user.getUsername());
-
-        try {
-            Authentication authentication = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.getUsername(),
-                            user.getPassword()
-                    )
-            );
-
-            if (!authentication.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("status", 401, "message", "Login failed"));
-            }
-
-            String token = jwtUtil.generateToken(user.getUsername());
-
-            return ResponseEntity.ok(Map.of(
-                    "status", 200,
-                    "token", token
-            ));
-
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("status", 401, "message", "Invalid username or password"));
-        }
+    public SecurityConfig(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
     }
 
-    // ================= REGISTER =================
-    @PostMapping("/register")
-    public String register(@RequestBody User user) {
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
-        if (userRepository.existsByUsername(user.getUsername())) {
-            return "user already exists";
-        }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // 🔥 IMPORTANT
-        user.setRole("ROLE_USER");
-        user.setProvider("LOCAL");
-
-        userRepository.save(user);
-
-        return "user registered successfully";
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http,
+                                                       PasswordEncoder passwordEncoder) throws Exception {
+        AuthenticationManagerBuilder builder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(userDetailsService)
+               .passwordEncoder(passwordEncoder);
+        return builder.build();
     }
 
-    // ================= GOOGLE LOGIN =================
-    @PostMapping("/google")
-    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> body) {
-
-        String email = body.get("email");
-        String provider = body.getOrDefault("provider", "google");
-
-        if (email == null || email.isBlank()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "email is required"));
-        }
-
-        User user = userRepository.findByUsername(email)
-                .orElseGet(() -> {
-                    User newUser = new User();
-                    newUser.setUsername(email);
-                    newUser.setPassword("OAUTH_USER"); // not used for auth
-                    newUser.setRole("ROLE_USER");
-                    newUser.setProvider(provider.toUpperCase());
-                    return userRepository.save(newUser);
-                });
-
-        System.out.println("GOOGLE LOGIN: user ready → " + user.getUsername());
-
-        String token = jwtUtil.generateToken(user.getUsername());
-
-        return ResponseEntity.ok(Map.of(
-                "status", 200,
-                "token", token
-        ));
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
-    // ================= SECURE TEST =================
-    @GetMapping("/secure")
-    public String secure() {
-        return "This is secured API";
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/auth/login",
+                    "/auth/register",
+                    "/auth/google",      // FIX 2: Allow Google login endpoint without auth
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
+                .anyRequest().authenticated()
+            )
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\": \"Unauthorized\"}");
+                })
+            )
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable());
+
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 }

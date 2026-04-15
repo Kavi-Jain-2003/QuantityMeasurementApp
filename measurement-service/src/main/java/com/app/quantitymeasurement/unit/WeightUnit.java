@@ -1,35 +1,38 @@
 package com.app.quantitymeasurement.unit;
 
-public enum WeightUnit implements IMeasurable{
+public enum WeightUnit implements IMeasurable {
     KILOGRAM(1.0),
     GRAM(0.001),
-    POUND(0.453592);
+    MILLIGRAM(0.000001),
+    POUND(0.45359237),
+    OUNCE(0.028349523),
+    TON(1000.0),
+    STONE(6.35029);
 
-    private final double toKG;
+    private final double toKilogram;
     private static final SupportsArithmetic sm = () -> true;
 
-    WeightUnit(double toKG){
-        this.toKG = toKG;
+    WeightUnit(double toKilogram) {
+        this.toKilogram = toKilogram;
     }
 
-    // kg as the baseValue
-    public double getConversionFactor(){
-        return toKG;
+    @Override
+    public double getConversionFactor() {
+        return toKilogram;
     }
 
-    // converting to baseValue
-    public double convertToBase(double baseValue){
-        return baseValue * toKG;
+    @Override
+    public double convertToBase(double baseValue) {
+        return baseValue * toKilogram;
     }
 
-    // converting from baseValue
-    public double convertFromBase(double baseValue){
-        return baseValue / toKG;
+    @Override
+    public double convertFromBase(double baseValue) {
+        return baseValue / toKilogram;
     }
 
-     @Override
+    @Override
     public String getUnitName() {
         return this.name();
     }
-
 }

@@ -15,6 +15,11 @@ public enum TemperatureUnit implements IMeasurable {
     KELVIN {
         public double convertToBase(double value) { return value - 273.15; }
         public double convertFromBase(double value) { return value + 273.15; }
+    },
+
+    RANKINE {
+        public double convertToBase(double value) { return (value - 491.67) * 5 / 9; }
+        public double convertFromBase(double value) { return (value + 273.15) * 9 / 5; }
     };
 
     private static final SupportsArithmetic supportsArithmetic = () -> false;

@@ -22,6 +22,20 @@ spring:
             - PreserveHostHeader
             - RemoveRequestHeader=Cookie
 
+        - id: USER-SERVICE-DOCS
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/v3/api-docs,/user-service/v3/api-docs/**
+          filters:
+            - StripPrefix=1
+
+        - id: MEASUREMENT-SERVICE-DOCS
+          uri: lb://MEASUREMENT-SERVICE
+          predicates:
+            - Path=/measurement-service/v3/api-docs,/measurement-service/v3/api-docs/**
+          filters:
+            - StripPrefix=1
+
       # Enable CORS for all services through gateway
       globalcors:
         corsConfigurations:
@@ -35,6 +49,19 @@ spring:
               - PUT
               - DELETE
             allowedHeaders: "*"
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    urls:
+      - name: user-service
+        url: http://localhost:8082/v3/api-docs
+      - name: measurement-service
+        url: http://localhost:8081/v3/api-docs
 
 eureka:
   client:

@@ -1,8 +1,7 @@
 package com.app.quantitymeasurement.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -31,4 +30,3 @@ public class SwaggerConfig {
             );
     }
 }
-//http://localhost:8081/swagger-ui/index.html#/quantity-measurement-controller
